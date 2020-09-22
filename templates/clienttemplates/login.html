@@ -1,0 +1,15 @@
+{% extends "clienttemplates/base.html" %}
+{% load static %}
+{% block content %}
+<h3>Login Form</h3>
+<form method="POST">
+<!-- Cross Site Request Forgery refers to attempts to send request from an external site while pretending to be the origin application which is often use by attackers to execute malicious actions in the server.-->
+<!-- Django protects against CSRF attacks by generating a CSRF token in the server -->
+	{% csrf_token %}
+	{{form.as_p}}
+	{{error}}<br>
+	<button>Login</button>
+	<h4>Or don't have an account<a href="{%  url 'hometuitionapp:signup' %}"> Sign up</a></h4>
+	<p>Login Successful!!</p>
+</form>
+{% endblock %}
