@@ -1,0 +1,10 @@
+{% extends "clienttemplates/base.html" %}
+{% block content %}
+<h4>Signup Form</h4>
+<form method="POST">
+	{% csrf_token %}
+	{{form.as_p}}
+	{{error}}
+	<button>Signup</button>	
+</form>
+{% endblock %}

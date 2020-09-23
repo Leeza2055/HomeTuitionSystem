@@ -1,8 +1,12 @@
 {% extends "clienttemplates/base.html" %}
 {% load static %}
+
 {% block content %}
+<a href="{% url 'hometuitionapp:login' %}">Login</a>
+<a href="{% url 'hometuitionapp:teachersignup' %}">Become a tutor</a>
+<a href="{% url 'hometuitionapp:studentsignup' %}">Join us</a>
+
+
 <h1>Home Tuition System</h1>
-
-
 
 {% endblock %}

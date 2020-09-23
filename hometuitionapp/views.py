@@ -10,9 +10,17 @@ class HomeView(TemplateView):
     template_name = "clienttemplates/home.html"
 
 
-class LoginView(FormView):
-    template_name = "clienttemplates/login.html"
-    form_class = LoginForm
+class AboutusView(TemplateView):
+    template_name = "clienttemplates/aboutus.html"
+
+
+class ContactusView(TemplateView):
+    template_name = "clienttemplates/contactus.html"
+
+
+class StudentLoginView(FormView):
+    template_name = "clienttemplates/studentlogin.html"
+    form_class = StudentLoginForm
     success_url = reverse_lazy("hometuitionapp:home")
 
     # validating username and password by form_valid method using cleaned_data
@@ -23,17 +31,17 @@ class LoginView(FormView):
         if user is not None:
             login(self.request, user)
         else:
-            return render(self.request, 'clienttemplates/login.html',
+            return render(self.request, 'clienttemplates/studentlogin.html',
                           {
                               "error": "Invalid username or password", "form": form
                           })
         return super().form_valid(form)
 
 
-class SignupView(FormView):
-    template_name = "clienttemplates/signup.html"
-    form_class = SignupForm
-    success_url = reverse_lazy("hometuitionapp:login")
+class StudentSignupView(FormView):
+    template_name = "clienttemplates/studentsignup.html"
+    form_class = StudentSignupForm
+    success_url = reverse_lazy("hometuitionapp:studentlogin")
 
     def form_valid(self, form):
         uname = form.cleaned_data["username"]
@@ -41,6 +49,43 @@ class SignupView(FormView):
         pword = form.cleaned_data["password"]
         User.objects.create_user(uname, email, pword)
         return super().form_valid(form)
+
+
+class TeacherLoginView(FormView):
+    template_name = "clienttemplates/teacherlogin.html"
+    form_class = TeacherLoginForm
+    success_url = reverse_lazy("hometuitionapp:home")
+
+    # validating username and password by form_valid method using cleaned_data
+    def form_valid(self, form):
+        uname = form.cleaned_data["username"]
+        pword = form.cleaned_data["password"]
+        user = authenticate(username=uname, password=pword)
+        if user is not None:
+            login(self.request, user)
+        else:
+            return render(self.request, 'clienttemplates/teacherlogin.html',
+                          {
+                              "error": "Invalid username or password", "form": form
+                          })
+        return super().form_valid(form)
+
+
+class TeacherSignupView(FormView):
+    template_name = "clienttemplates/teachersignup.html"
+    form_class = TeacherSignupForm
+    success_url = reverse_lazy("hometuitionapp:teacherlogin")
+
+    def form_valid(self, form):
+        uname = form.cleaned_data["username"]
+        email = form.cleaned_data["email"]
+        pword = form.cleaned_data["password"]
+        User.objects.create_user(uname, email, pword)
+        return super().form_valid(form)
+
+
+class LoginView(TemplateView):
+    template_name = "clienttemplates/login.html"
 
 
 class AdminHomeView(TemplateView):
