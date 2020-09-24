@@ -29,16 +29,16 @@ class HomeTuitionSystem(TimeStamp):
         return self.name
 
 
-# # # GENDER = (
-# # #     ("male", "MALE"),
-# # #     ("female", "FEMALE"),
-# # #     ("other", "OTHER"),
-# # # )
+GENDER = (
+    ("male", "MALE"),
+    ("female", "FEMALE"),
+    ("other", "OTHER"),
+)
 
 
-# # # class Teacher(TimeStamp):
-# # #     teacher_id = models.AutoField(primary_key=True)
-# # #     first_name = models.CharField(max_length=30)
-# # #     middle_name = models.CharField(max_length=30)
-# # #     last_name = models.CharField(max_length=30)
-# # #     gender = models.CharField(max_length=10,choices=GENDER)
+class Teacher(TimeStamp):
+    teacher_id = models.AutoField(primary_key=True)
+    first_name = models.CharField(max_length=30)
+    middle_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    gender = models.CharField(max_length=10,choices=GENDER)
