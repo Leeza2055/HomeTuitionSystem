@@ -1,0 +1,6 @@
+{% extends "clienttemplates/base.html" %}
+{% load static %}
+{% block content %}
+Welcome {{user}}
+<a href="{% url 'hometuitionapp:teacherregister' %}">Create your profile to register</a>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "admintemplates/base.html" %}
+{% load static %}
+{% block content %}
+<h3>Login Form</h3>
+<form method="POST">
+	{% csrf_token %}
+	{{form.as_p}}
+	{{error}}<br>
+	<button>Login</button>
+</form>
+{% endblock %}
