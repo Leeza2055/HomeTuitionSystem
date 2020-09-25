@@ -1,0 +1,27 @@
+{% extends "admintemplates/base.html" %}
+{% load static %}
+{% block content %}
+<table>
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Name</th>
+			<th>Created</th>
+			<!-- <th>Status</th> -->
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for teacher in teacherlist %}
+		<tr>
+			<td>{{forloop.counter}}</td>
+			<td>{{teacher.name}}</td>
+			<td>{{teacher.created_at}}</td>
+			<!-- <td>{% if teacher.active %}active{% else %}inactive{% endif %}</td> -->
+			<td><a href="#">Update</a></td>
+			<a href="#">Delete</a></td>
+		</tr>
+		{% endfor %}
+	</tbody>	
+</table>
+{% endblock %}

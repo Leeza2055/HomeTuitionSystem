@@ -1,11 +1,14 @@
 from django.db import models
-
+from django.contrib.auth.models import User, Group
 # # Create your models here.
 
 # # This model will not be used to create database table instead it is used as a base class for other models
+
+
 class TimeStamp(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # active = models.BooleanField(default=True)
 
 # To put common info into number of other models
     class Meta:
@@ -37,8 +40,41 @@ GENDER = (
 
 
 class Teacher(TimeStamp):
-    teacher_id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=30)
-    middle_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    gender = models.CharField(max_length=10,choices=GENDER)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30)
+    gender = models.CharField(max_length=10, choices=GENDER)
+    photo = models.ImageField(upload_to="teacher")
+    phone_no = models.CharField(max_length=40)
+    email = models.EmailField()
+    address = models.CharField(max_length=40)
+    education = models.CharField(max_length=100)
+    experience = models.CharField(max_length=40)
+    cv = models.FileField(upload_to="cv")
+    citizenship = models.FileField(upload_to="citizenship")
+    subject = models.CharField(max_length=50)
+
+    # def save(self, *args, **kwargs):
+    #     grp, created = Group.objects.get_or_create(name="teacher")
+    #     self.user.groups.add(grp)
+    #     super.save()(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+# class Student(TimeStamp):
+#     name = models.CharField(max_length=30)
+#     email = models.EmailField()
+#     address = models.CharField(max_length=40)
+#     subject = models.CharField(max_length=40)
+#     phone_no = models.CharField(max_length=40)
+
+#     def __str__(self):
+#         return self.name
+
+# class Course(TimeStamp):
+#     course_name = models.CharField(max_length=40)
+#     subject = models.CharField(max_length=40)
+
+# class Payment(TimeStamp):
+#     amount =

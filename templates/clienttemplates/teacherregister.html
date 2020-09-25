@@ -1,7 +1,7 @@
 {% extends "clienttemplates/base.html" %}
 {% block content %}
-<h4>Signup Form</h4>
-<form method="POST">
+<h4>Register Form</h4>
+<form enctype="multipart/form-data" method="POST">
 	{% csrf_token %}
 	{{form.as_p}}
 	{{error}}
