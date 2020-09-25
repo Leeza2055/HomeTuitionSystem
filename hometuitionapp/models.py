@@ -32,6 +32,23 @@ class HomeTuitionSystem(TimeStamp):
         return self.name
 
 
+# class Course(TimeStamp):
+#     name = models.CharField(max_length=40)
+
+#     def __str__(self):
+#         return self.name
+
+
+# class Subject(TimeStamp):
+#     name = models.CharField(max_length=50)
+#     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+#     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+#     student = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+#     def __str__(self):
+#         return self.name
+
+
 GENDER = (
     ("male", "MALE"),
     ("female", "FEMALE"),
@@ -72,9 +89,3 @@ class Teacher(TimeStamp):
 #     def __str__(self):
 #         return self.name
 
-# class Course(TimeStamp):
-#     course_name = models.CharField(max_length=40)
-#     subject = models.CharField(max_length=40)
-
-# class Payment(TimeStamp):
-#     amount =
