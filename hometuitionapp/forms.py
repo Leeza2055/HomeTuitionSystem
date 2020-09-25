@@ -50,11 +50,13 @@ class TeacherLoginForm(forms.Form):
     }))
 
 
-class TeacherSignupForm(forms.Form):
+class TeacherSignupForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput())
-    email = forms.CharField(widget=forms.EmailInput())
     password = forms.CharField(widget=forms.PasswordInput())
     confirm_password = forms.CharField(widget=forms.PasswordInput())
+    class Meta:
+        model = Teacher
+        fields = ['username', 'email', 'password', 'confirm_password', 'name', 'gender', 'photo', 'phone_no', 'address', 'education',  'experience', 'cv', 'citizenship', 'subject']
 
     def clean_username(self):
         uname = self.cleaned_data["username"]

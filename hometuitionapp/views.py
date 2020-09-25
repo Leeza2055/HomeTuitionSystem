@@ -103,9 +103,18 @@ class LoginView(TemplateView):
 
 class TeacherRegisterView(CreateView):
     template_name = "clienttemplates/teacherregister.html"
-    form_class = TeacherRegisterForm
+    form_class = TeacherSignupForm
     success_url = reverse_lazy("hometuitionapp:home")
     success_message = "Successfully registered"
+
+    def form_valid(self, form):
+        uname = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        email = form.cleaned_data['email']
+        user = User.objects.create_user(uname, email, password)
+        form.instance.user = user
+
+        return super().form_valid(form)
 
 
 # class LogoutView(View):

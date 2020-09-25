@@ -56,8 +56,23 @@ GENDER = (
 )
 
 
+class Course(TimeStamp):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
+class Subject(TimeStamp):
+    name = models.CharField(max_length=200)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
 class Teacher(TimeStamp):
-    # user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=30)
     gender = models.CharField(max_length=10, choices=GENDER)
     photo = models.ImageField(upload_to="teacher")
@@ -68,12 +83,12 @@ class Teacher(TimeStamp):
     experience = models.CharField(max_length=40)
     cv = models.FileField(upload_to="cv")
     citizenship = models.FileField(upload_to="citizenship")
-    subject = models.CharField(max_length=50)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
-    # def save(self, *args, **kwargs):
-    #     grp, created = Group.objects.get_or_create(name="teacher")
-    #     self.user.groups.add(grp)
-    #     super.save()(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        grp, created = Group.objects.get_or_create(name="teacher")
+        self.user.groups.add(grp)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -88,4 +103,8 @@ class Teacher(TimeStamp):
 
 #     def __str__(self):
 #         return self.name
+
+
+
+>>>>>>> 7ffa3eaa73567184253f3692745c3a3832d6812e
 
