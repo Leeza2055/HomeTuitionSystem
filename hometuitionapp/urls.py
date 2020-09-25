@@ -12,7 +12,7 @@ urlpatterns = [
     # path('teacher/login/', TeacherLoginView.as_view(), name="teacherlogin"),
     # path('teacher/signup/', TeacherSignupView.as_view(), name="teachersignup"),
     # path('teacher/add/profile/', TeacherProfileView.as_view(), name="teacherprofile"),
-    path('teacher/register/', TeacherRegisterView.as_view(), name="teacherregister"),
+    # path('teacher/register/', TeacherRegisterView.as_view(), name="teacherregister"),
     # path('logout/', LogoutView.as_view(), name="logout"),
 
 
@@ -20,15 +20,15 @@ urlpatterns = [
 
 
     # admin side
-    path('system_admin/', AdminHomeView.as_view(), name="adminhome"),
-    # path('adminlogin/',AdminLoginView.as_view(), name="adminlogin"),
-    path('system_admin/hometuitionsystem/<int:pk>/detail/',
-         AdminHomeTuitionSystemDetailView.as_view(), name="adminsystemdetail"),
-    path('system_admin/hometuitionsystem/<int:pk>/update/',
-         AdminHomeTuitionSystemUpdateView.as_view(), name="adminsystemupdate"),
-    path('system_admin/teacher/list/', AdminTeacherListView.as_view(), name="adminteacherlist"),
-    path('system_admin/teacher/<int:pk>/update', AdminTeacherUpdateView.as_view(),name="adminteacherupdate"),
-    path('system_admin/teacher/<int:pk>delete',AdminTeacherDeleteView.as_view(), name="adminteacherdelete")
+    # path('system_admin/', AdminHomeView.as_view(), name="adminhome"),
+    # # path('adminlogin/',AdminLoginView.as_view(), name="adminlogin"),
+    # path('system_admin/hometuitionsystem/<int:pk>/detail/',
+    #      AdminHomeTuitionSystemDetailView.as_view(), name="adminsystemdetail"),
+    # path('system_admin/hometuitionsystem/<int:pk>/update/',
+    #      AdminHomeTuitionSystemUpdateView.as_view(), name="adminsystemupdate"),
+    # path('system_admin/teacher/list/', AdminTeacherListView.as_view(), name="adminteacherlist"),
+    # path('system_admin/teacher/<int:pk>/update', AdminTeacherUpdateView.as_view(),name="adminteacherupdate"),
+    # path('system_admin/teacher/<int:pk>delete',AdminTeacherDeleteView.as_view(), name="adminteacherdelete")
 
 
 

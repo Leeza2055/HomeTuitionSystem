@@ -8,14 +8,14 @@ from django.contrib.auth.models import User, Group
 class TimeStamp(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # active = models.BooleanField(default=True)
+    active = models.BooleanField(default=True)
 
 # To put common info into number of other models
     class Meta:
         abstract = True
 
 
-# # This model is created to extract system info and display the info dynamically in the website
+# # # This model is created to extract system info and display the info dynamically in the website
 class HomeTuitionSystem(TimeStamp):
     name = models.CharField(max_length=40)
     logo = models.ImageField(upload_to="logo")
@@ -32,79 +32,67 @@ class HomeTuitionSystem(TimeStamp):
         return self.name
 
 
+# # GENDER = (
+# #     ("male", "MALE"),
+#     ("female", "FEMALE"),
+#     ("other", "OTHER"),
+# )
+
+
 # class Course(TimeStamp):
-#     name = models.CharField(max_length=40)
+#     name = models.CharField(max_length=200)
 
 #     def __str__(self):
 #         return self.name
 
 
 # class Subject(TimeStamp):
-#     name = models.CharField(max_length=50)
+#     name = models.CharField(max_length=200)
 #     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-#     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-#     student = models.ForeignKey(Student, on_delete=models.CASCADE)
 
 #     def __str__(self):
 #         return self.name
 
 
-GENDER = (
-    ("male", "MALE"),
-    ("female", "FEMALE"),
-    ("other", "OTHER"),
-)
+# class Teacher(TimeStamp):
+#     user = models.OneToOneField(
+#         User, on_delete=models.CASCADE, null=True, blank=True)
+#     name = models.CharField(max_length=30)
+#     gender = models.CharField(max_length=10, choices=GENDER)
+#     photo = models.ImageField(upload_to="teacher")
+#     phone_no = models.CharField(max_length=40)
+#     email = models.EmailField()
+#     address = models.CharField(max_length=40)
+#     education = models.CharField(max_length=100)
+#     experience = models.CharField(max_length=40)
+#     cv = models.FileField(upload_to="cv")
+#     citizenship = models.FileField(upload_to="citizenship")
+#     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
+#     def save(self, *args, **kwargs):
+#         grp, created = Group.objects.get_or_create(name="teacher")
+#         self.user.groups.add(grp)
+#         super().save(*args, **kwargs)
 
-class Course(TimeStamp):
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
-
-
-class Subject(TimeStamp):
-    name = models.CharField(max_length=200)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-
-class Teacher(TimeStamp):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=30)
-    gender = models.CharField(max_length=10, choices=GENDER)
-    photo = models.ImageField(upload_to="teacher")
-    phone_no = models.CharField(max_length=40)
-    email = models.EmailField()
-    address = models.CharField(max_length=40)
-    education = models.CharField(max_length=100)
-    experience = models.CharField(max_length=40)
-    cv = models.FileField(upload_to="cv")
-    citizenship = models.FileField(upload_to="citizenship")
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-
-    def save(self, *args, **kwargs):
-        grp, created = Group.objects.get_or_create(name="teacher")
-        self.user.groups.add(grp)
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 
 # class Student(TimeStamp):
+#     user = models.OneToOneField(
+#         User, on_delete=models.CASCADE, null=True, blank=True)
 #     name = models.CharField(max_length=30)
 #     email = models.EmailField()
 #     address = models.CharField(max_length=40)
-#     subject = models.CharField(max_length=40)
 #     phone_no = models.CharField(max_length=40)
+#     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+#     report_card = models.FileField(upload_to="report_card")
+
+#     def save(self, *args, **kwargs):
+#         grp, created = Group.objects.get_or_create(name="student")
+#         self.user.groups.add(grp)
+#         super().save(*args, **kwargs)
+
 
 #     def __str__(self):
 #         return self.name
-
-
-
->>>>>>> 7ffa3eaa73567184253f3692745c3a3832d6812e
-

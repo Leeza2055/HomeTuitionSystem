@@ -101,20 +101,20 @@ class LoginView(TemplateView):
 # class TeacherProfileView(TemplateView):
 #     template_name = "clienttemplates/teacherprofile.html"
 
-class TeacherRegisterView(CreateView):
-    template_name = "clienttemplates/teacherregister.html"
-    form_class = TeacherSignupForm
-    success_url = reverse_lazy("hometuitionapp:home")
-    success_message = "Successfully registered"
+# class TeacherRegisterView(CreateView):
+#     template_name = "clienttemplates/teacherregister.html"
+#     form_class = TeacherSignupForm
+#     success_url = reverse_lazy("hometuitionapp:home")
+#     success_message = "Successfully registered"
 
-    def form_valid(self, form):
-        uname = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        email = form.cleaned_data['email']
-        user = User.objects.create_user(uname, email, password)
-        form.instance.user = user
+#     def form_valid(self, form):
+#         uname = form.cleaned_data['username']
+#         password = form.cleaned_data['password']
+#         email = form.cleaned_data['email']
+#         user = User.objects.create_user(uname, email, password)
+#         form.instance.user = user
 
-        return super().form_valid(form)
+#         return super().form_valid(form)
 
 
 # class LogoutView(View):
@@ -153,34 +153,34 @@ class AdminHomeView(TemplateView):
 #         return super().form_valid(form)
 
 
-class AdminHomeTuitionSystemDetailView(DetailView):
-    template_name = "admintemplates/adminsystemdetail.html"
-    model = HomeTuitionSystem
-    # this context_object_name is used to display data for eg{{systemdetail.name}} will display name of the system
-    context_object_name = "systemdetail"
+# class AdminHomeTuitionSystemDetailView(DetailView):
+#     template_name = "admintemplates/adminsystemdetail.html"
+#     model = HomeTuitionSystem
+#     # this context_object_name is used to display data for eg{{systemdetail.name}} will display name of the system
+#     context_object_name = "systemdetail"
 
 
-class AdminHomeTuitionSystemUpdateView(UpdateView):
-    template_name = "admintemplates/adminsystemupdate.html"
-    form_class = HomeTuitionSystemForm
-    success_url = reverse_lazy("hometuitionapp:adminhome")
-    model = HomeTuitionSystem
+# class AdminHomeTuitionSystemUpdateView(UpdateView):
+#     template_name = "admintemplates/adminsystemupdate.html"
+#     form_class = HomeTuitionSystemForm
+#     success_url = reverse_lazy("hometuitionapp:adminhome")
+#     model = HomeTuitionSystem
 
 
-class AdminTeacherListView(ListView):
-    template_name = "admintemplates/adminteacherlist.html"
-    queryset = Teacher.objects.all().order_by("-id")
-    context_object_name = "teacherlist"
+# class AdminTeacherListView(ListView):
+#     template_name = "admintemplates/adminteacherlist.html"
+#     queryset = Teacher.objects.all().order_by("-id")
+#     context_object_name = "teacherlist"
 
 
-class AdminTeacherUpdateView(UpdateView):
-    template_name = "admintemplates/adminteacherupdate.html"
-    form_class = TeacherRegisterForm
-    success_url = reverse_lazy("hometuitionapp:adminteacherlist")
-    model = Teacher
+# class AdminTeacherUpdateView(UpdateView):
+#     template_name = "admintemplates/adminteacherupdate.html"
+#     form_class = TeacherRegisterForm
+#     success_url = reverse_lazy("hometuitionapp:adminteacherlist")
+#     model = Teacher
 
 
-class AdminTeacherDeleteView(DeleteView):
-    template_name = "admintemplates/adminteacherdelete.html"
-    success_url = reverse_lazy("hometuitionapp:adminteacherlist")
-    model = Teacher
+# class AdminTeacherDeleteView(DeleteView):
+#     template_name = "admintemplates/adminteacherdelete.html"
+#     success_url = reverse_lazy("hometuitionapp:adminteacherlist")
+#     model = Teacher
