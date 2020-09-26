@@ -8,7 +8,6 @@
 
 <div class="container-fluid">
     <div class="row">
-        <!-- Stats -->
         <div class="outer-w3-agile col-xl">
             <div class="work-progres">
                 <h4 class="tittle-w3-agileits mb-4">Recent Followers</h4>
@@ -25,17 +24,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                        	{% for teacher in teacherlist %}
-                        	<tr>
-                        		<td>{{forloop.counter}}</td>
-                        		<td>{{teacher.name}}</td>
-                        		<td>{{teacher.created_at}}</td>
-                        		<td>{% if teacher.active %}active{% else %}inactive{% endif %}</td>
-                        		<td><a href="{% url 'hometuitionapp:adminteacherupdate' teacher.pk %}">Update</a>
-                            		<a href="{% url 'hometuitionapp:adminteacherdelete' teacher.pk %}">Delete</a>
-                            	</td>
-                        	</tr>
-                        	{% endfor %}
+                            {% for student in studentlist %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td><a href="{% url 'hometuitionapp:adminstudentdetail' student.pk %}">{{student.name}}</a></td>
+                                        <td>{{student.created_at}}</td>
+                                        <td>{% if student.active %}active{% else %}inactive{% endif %}</td>
+                                        <td><a href="{% url 'hometuitionapp:adminstudentupdate' student.pk %}">Update</a>
+                                        <a href="{% url 'hometuitionapp:adminstudentdelete' student.pk %}">Delete</a></td>
+                                    </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

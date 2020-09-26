@@ -25,17 +25,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                        	{% for teacher in teacherlist %}
-                        	<tr>
-                        		<td>{{forloop.counter}}</td>
-                        		<td>{{teacher.name}}</td>
-                        		<td>{{teacher.created_at}}</td>
-                        		<td>{% if teacher.active %}active{% else %}inactive{% endif %}</td>
-                        		<td><a href="{% url 'hometuitionapp:adminteacherupdate' teacher.pk %}">Update</a>
-                            		<a href="{% url 'hometuitionapp:adminteacherdelete' teacher.pk %}">Delete</a>
-                            	</td>
-                        	</tr>
-                        	{% endfor %}
+                            {% for subject in subjectlist %}
+                            		<tr>
+                            			<td>{{forloop.counter}}</td>
+                            			<td>{{subject.name}}</td>
+                            			<td>{{subject.created_at}}</td>
+                            			<td>{% if subject.active %}active{% else %}inactive{% endif %}</td>
+                            			<td><a href="{% url 'hometuitionapp:adminsubjectupdate' subject.pk %}">Update</a>
+                            			<a href="{% url 'hometuitionapp:adminsubjectdelete' subject.pk %}">Delete</a></td>
+                            		</tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

@@ -32,67 +32,68 @@ class HomeTuitionSystem(TimeStamp):
         return self.name
 
 
-# # GENDER = (
-# #     ("male", "MALE"),
-#     ("female", "FEMALE"),
-#     ("other", "OTHER"),
-# )
+class Course(TimeStamp):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
 
 
-# class Course(TimeStamp):
-#     name = models.CharField(max_length=200)
+class Subject(TimeStamp):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
 
-#     def __str__(self):
-#         return self.name
-
-
-# class Subject(TimeStamp):
-#     name = models.CharField(max_length=200)
-#     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
 
 
-# class Teacher(TimeStamp):
-#     user = models.OneToOneField(
-#         User, on_delete=models.CASCADE, null=True, blank=True)
-#     name = models.CharField(max_length=30)
-#     gender = models.CharField(max_length=10, choices=GENDER)
-#     photo = models.ImageField(upload_to="teacher")
-#     phone_no = models.CharField(max_length=40)
-#     email = models.EmailField()
-#     address = models.CharField(max_length=40)
-#     education = models.CharField(max_length=100)
-#     experience = models.CharField(max_length=40)
-#     cv = models.FileField(upload_to="cv")
-#     citizenship = models.FileField(upload_to="citizenship")
-#     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-
-#     def save(self, *args, **kwargs):
-#         grp, created = Group.objects.get_or_create(name="teacher")
-#         self.user.groups.add(grp)
-#         super().save(*args, **kwargs)
-
-#     def __str__(self):
-#         return self.name
+GENDER = (
+    ("male", "MALE"),
+    ("female", "FEMALE"),
+    ("other", "OTHER"),
+)
 
 
-# class Student(TimeStamp):
-#     user = models.OneToOneField(
-#         User, on_delete=models.CASCADE, null=True, blank=True)
-#     name = models.CharField(max_length=30)
-#     email = models.EmailField()
-#     address = models.CharField(max_length=40)
-#     phone_no = models.CharField(max_length=40)
-#     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-#     report_card = models.FileField(upload_to="report_card")
+class Teacher(TimeStamp):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=30)
+    gender = models.CharField(max_length=10, choices=GENDER)
+    photo = models.ImageField(upload_to="teacher")
+    phone_no = models.CharField(max_length=40)
+    email = models.EmailField()
+    address = models.CharField(max_length=40)
+    education = models.CharField(max_length=100)
+    experience = models.CharField(max_length=40)
+    cv = models.FileField(upload_to="cv")
+    citizenship = models.FileField(upload_to="citizenship")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
-#     def save(self, *args, **kwargs):
-#         grp, created = Group.objects.get_or_create(name="student")
-#         self.user.groups.add(grp)
-#         super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        grp, created = Group.objects.get_or_create(name="teacher")
+        self.user.groups.add(grp)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 
-#     def __str__(self):
-#         return self.name
+class Student(TimeStamp):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=30)
+    email = models.EmailField()
+    address = models.CharField(max_length=40)
+    phone_no = models.CharField(max_length=40)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    report_card = models.FileField(upload_to="report_card")
+
+    def save(self, *args, **kwargs):
+        grp, created = Group.objects.get_or_create(name="student")
+        self.user.groups.add(grp)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
