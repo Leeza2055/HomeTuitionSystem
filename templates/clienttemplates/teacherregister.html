@@ -1,10 +1,30 @@
 {% extends "clienttemplates/base.html" %}
-{% block content %}
-<h4>Register Form</h4>
-<form enctype="multipart/form-data" method="POST">
-	{% csrf_token %}
-	{{form.as_p}}
-	{{error}}
-	<button>Signup</button>	
-</form>
+{% block css %}
+<link rel="stylesheet" href="{% static 'clientstatic/css/login.css' %}">
 {% endblock %}
+{% block content %}
+<div class="login-section">
+<div class="flex-container">
+<div class="flex-group">	
+<h3>Registration Form </h3>
+</div>
+<form class="form-group" enctype="multipart/form-data" method="POST">
+<!-- Cross Site Request Forgery refers to attempts to send request from an external site while pretending to be the origin application which is often use by attackers to execute malicious actions in the server.-->
+<!-- Django protects against CSRF attacks by generating a CSRF token in the server -->
+	{% csrf_token %}
+	<div class="flex-group">
+	{{form.as_p}}
+	</div>
+	{{error}}<br>
+	<div class="flex-group">	
+	<button type="submit" class="btn btn-primary">Submit</button>
+	<hr>
+	<p>Already Registered?<a href="{%  url 'hometuitionapp:studentlogin' %}">Login</a></p>
+</div>
+</form>
+</div>
+</div>
+{% endblock %}
+{% block content %}
+
+
