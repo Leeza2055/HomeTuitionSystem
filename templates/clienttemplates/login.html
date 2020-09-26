@@ -1,10 +1,22 @@
 {% extends "clienttemplates/base.html" %}
 {% load static %}
 {% block css %}
+<link rel="stylesheet" href="{% static 'clientstatic/css/login.css' %}">
 {% endblock %}
 {% block content %}
-<form>
-	<button><a href="{% url 'hometuitionapp:studentlogin' %}">Login as Student</a></button><br>
-	<button><a href="{% url 'hometuitionapp:teacherlogin' %}">Login as Teacher</a></button>
+<div class="login-section">
+<div class="flex-container">
+	<h2>Login</h2>
+	<hr>
+<form class='form-group'>
+	<div class="flex-group">
+	<button type="submit" class="btn btn-primary "><a href="{% url 'hometuitionapp:studentlogin' %}">Login as Student</a></button><br>
+	</div>
+	<br>
+	<div class="flex-group">
+	<button type="submit" class="btn btn-primary "><a href="{% url 'hometuitionapp:teacherlogin' %}">Login as Teacher</a></button>
+	</div>
 </form>
+</div>
+</div>
 {% endblock %}
