@@ -71,25 +71,58 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <li>
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">
                         <i class="fas fa-laptop"></i>
-                        Components
+                        Course
                         <i class="fas fa-angle-down fa-pull-right"></i>
                     </a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
-                            <a href="cards.html">Cards</a>
+                            <a href="{% url 'hometuitionapp:admincourselist' %}">Course List</a>
                         </li>
                         <li>
-                            <a href="carousels.html">Carousels</a>
+                            <a href="{% url 'hometuitionapp:admincoursecreate' %}">Course Create</a>
+                        </li>   
+                    </ul>
+                </li>
+                <li>
+                    <a href="#subject" data-toggle="collapse" aria-expanded="false">
+                        <i class="fas fa-laptop"></i>
+                        Subject
+                        <i class="fas fa-angle-down fa-pull-right"></i>
+                    </a>
+                    <ul class="collapse list-unstyled" id="subject">
+                        <li>
+                            <a href="{% url 'hometuitionapp:adminsubjectlist' %}">Subject List</a>
                         </li>
                         <li>
-                            <a href="forms.html">Forms</a>
-                        </li>
+                            <a href="{% url 'hometuitionapp:adminsubjectcreate' %}">Subject Create</a>
+                        </li>   
+                    </ul>
+                </li>
+                
+                <li>
+                    <a href="#student" data-toggle="collapse" aria-expanded="false">
+                        <i class="fas fa-laptop"></i>
+                        Student
+                        <i class="fas fa-angle-down fa-pull-right"></i>
+                    </a>
+                    <ul class="collapse list-unstyled" id="student">
                         <li>
-                            <a href="modals.html">Modals</a>
+                            <a href="{% url 'hometuitionapp:adminstudentlist' %}">Student List</a>
                         </li>
+                           
+                    </ul>
+                </li>
+                <li>
+                    <a href="#teacher" data-toggle="collapse" aria-expanded="false">
+                        <i class="fas fa-laptop"></i>
+                        Teacher
+                        <i class="fas fa-angle-down fa-pull-right"></i>
+                    </a>
+                    <ul class="collapse list-unstyled" id="teacher">
                         <li>
-                            <a href="tables.html">Tables</a>
+                            <a href="{% url 'hometuitionapp:adminteacherlist' %}">Teacher List</a>
                         </li>
+                          
                     </ul>
                 </li>
                 <li>

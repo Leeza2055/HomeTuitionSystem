@@ -28,7 +28,7 @@
                         	{% for teacher in teacherlist %}
                         	<tr>
                         		<td>{{forloop.counter}}</td>
-                        		<td>{{teacher.name}}</td>
+                                <td><a href="{% url 'hometuitionapp:adminteacherdetail' teacher.pk %}">{{teacher.name}}</a></td>
                         		<td>{{teacher.created_at}}</td>
                         		<td>{% if teacher.active %}active{% else %}inactive{% endif %}</td>
                         		<td><a href="{% url 'hometuitionapp:adminteacherupdate' teacher.pk %}">Update</a>

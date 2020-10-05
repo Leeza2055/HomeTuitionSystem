@@ -11,7 +11,11 @@ urlpatterns = [
     path('student/register/', StudentRegisterView.as_view(), name="studentregister"),
     path('teacher/login/', TeacherLoginView.as_view(), name="teacherlogin"),
     path('teacher/register/', TeacherRegisterView.as_view(), name="teacherregister"),
-    path("search/", SearchView.as_view(), name="search"),
+    path('teacher/home', TeacherHomeView.as_view(),name="teacherhome"),
+    path('student/home/', StudentHomeView.as_view(), name="studenthome"),
+
+    # path('teacher/<int:pk>/profile/', TeacherProfileView.as_view(), name="teacherprofile"),
+    # path("search/", SearchView.as_view(), name="search"),
     path('logout/', LogoutView.as_view(), name="logout"),
 
 
@@ -53,7 +57,7 @@ urlpatterns = [
          AdminStudentDeleteView.as_view(), name="adminstudentdelete"),
     path('system_admin/teacher/list/',
          AdminTeacherListView.as_view(), name="adminteacherlist"),
-    
+
     path('system_admin/teacher/<int:pk>/detail/',
          AdminTeacherDetailView.as_view(), name="adminteacherdetail"),
 

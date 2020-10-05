@@ -73,7 +73,7 @@ class StudentRegisterView(CreateView):
 class TeacherLoginView(FormView):
     template_name = "clienttemplates/teacherlogin.html"
     form_class = TeacherLoginForm
-    success_url = reverse_lazy("hometuitionapp:aboutus")
+    success_url = reverse_lazy("hometuitionapp:teacherhome")
 
     # validating username and password by form_valid method using cleaned_data
     def form_valid(self, form):
@@ -106,17 +106,37 @@ class TeacherRegisterView(CreateView):
         return super().form_valid(form)
 
 
-class SearchView(TemplateView):
-    template_name = "clienttemplates/searchresult.html"
+class StudentHomeView(TemplateView):
+    template_name = "clienttemplates/studenthome.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        keyword = self.request.GET["query"]
-        print(keyword, "+++++++++++")
-        teachers = Teacher.object.filter(Q(address__icontains=keyword)
-                                         | Q(subject__icontains=keyword))
-        context["searched_teachers"] = teachers
-        return context
+
+class TeacherHomeView(TemplateView):
+    template_name = "clienttemplates/teacherhome.html"
+
+
+# class TeacherProfileView(DetailView):
+#     template_name = "clienttemplates/teacherprofile.html"
+#     model = Teacher
+#     context_object_name = "teacherdetail"
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     teacher_id = self.kwargs["pk"]
+    #     teacher = Teacher.objects.get(id=teacher_id)
+
+    #     return context
+
+# class SearchView(TemplateView):
+#     template_name = "clienttemplates/searchresult.html"
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         keyword = self.request.GET["query"]
+#         print(keyword, "+++++++++++")
+#         teachers = Teacher.object.filter(Q(address__icontains=keyword)
+#                                          | Q(subject__icontains=keyword))
+#         context["searched_teachers"] = teachers
+#         return context
 
 
 class LogoutView(View):
@@ -268,9 +288,9 @@ class AdminTeacherDetailView(DetailView):
     model = Teacher
     context_object_name = "teacherdetail"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        teacher_id = self.kwargs["pk"]
-        teacher = Teacher.objects.get(id=teacher_id)
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     teacher_id = self.kwargs["pk"]
+    #     teacher = Teacher.objects.get(id=teacher_id)
 
-        return context
+    #     return context
