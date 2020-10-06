@@ -291,12 +291,12 @@ li.nav-item a {
 
 /*-- Sticky Navigation --*/
 
-.sticky-nav.fixed-header {
+/* .sticky-nav.fixed-header {
     position: fixed;
     top: 0;
     right: 0;
     left: 0;
-}
+} */
 
 nav.navbar.navbar-expand-lg.navbar-light.bg-light.sticky-nav {
     z-index: 999;
@@ -615,16 +615,21 @@ p.conta-para-style {
 }
 
 .subscribe-w3ls input[type="email"] {
-    width: 70%;
+    width: 75%;
     float: left;
     padding: 14px;
     font-size: 15px;
-    color: #fff;
+    /* color: #fff; */
     outline: none;
-    background: rgba(255, 255, 255, 0.26);
+    /* background: rgba(255, 255, 255, 0.26); */
     border: none;
     letter-spacing: 1px;
     border-radius: 0;
+}
+
+.subscribe-w3ls textarea {
+    width: 75%;
+    
 }
 
 .subscribe-w3ls button[type="submit"] {
