@@ -1,4 +1,5 @@
 {% extends "clienttemplates/base.html" %}
+{% load bootstrap3 %}
 {% load static %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'clientstatic/css/login.css' %}">
@@ -13,14 +14,15 @@
 <!-- Cross Site Request Forgery refers to attempts to send request from an external site while pretending to be the origin application which is often use by attackers to execute malicious actions in the server.-->
 <!-- Django protects against CSRF attacks by generating a CSRF token in the server -->
 	{% csrf_token %}
+	{% bootstrap_form form %}
 	<div class="flex-group">
-	{{form.as_p}}
+	<!-- {{form.as_p}} -->
 	</div>
 	{{error}}<br>
 	<div class="flex-group">	
 	<button type="submit" class="btn btn-primary">Submit</button>
 	<hr>
-	<p>Already Registered?<a href="{%  url 'hometuitionapp:studentlogin' %}">Login</a></p>
+	<p>Already Registered?<a href="{%  url 'hometuitionapp:teacherlogin' %}">Login</a></p>
 </div>
 </form>
 </div>
