@@ -17,9 +17,21 @@ class StudentLoginForm(forms.Form):
 
 
 class StudentRegisterForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput())
-    password = forms.CharField(widget=forms.PasswordInput())
-    confirm_password = forms.CharField(widget=forms.PasswordInput())
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        "placeholder": "Enter your username..",
+        "class": "form-control",
+
+    }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        "placeholder": "Enter your password..",
+        "class": "form-control",
+
+    }))
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        "placeholder": "Enter your password again..",
+        "class": "form-control",
+
+    }))
 
     class Meta:
         model = Student
@@ -55,7 +67,11 @@ class TeacherLoginForm(forms.Form):
 
 
 class TeacherRegisterForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput())
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        "placeholder": "Enter your username..",
+        "class": "form-control",
+
+    }))
     password = forms.CharField(widget=forms.PasswordInput())
     confirm_password = forms.CharField(widget=forms.PasswordInput())
 

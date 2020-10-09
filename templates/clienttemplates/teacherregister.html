@@ -1,29 +1,118 @@
 {% extends "clienttemplates/base.html" %}
 {% load static %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'clientstatic/css/login.css' %}">
+	
 {% endblock %}
 {% block content %}
-<div class="login-section">
-<div class="flex-container">
-<div class="flex-group">	
-<h3>Registration Form </h3>
-</div>
-<form class="form-group" enctype="multipart/form-data" method="POST">
-<!-- Cross Site Request Forgery refers to attempts to send request from an external site while pretending to be the origin application which is often use by attackers to execute malicious actions in the server.-->
-<!-- Django protects against CSRF attacks by generating a CSRF token in the server -->
-	{% csrf_token %}
-	<div class="flex-group">
-	{{form.as_p}}
-	</div>
-	{{error}}<br>
-	<div class="flex-group">	
-	<button type="submit" class="btn btn-primary">Submit</button>
-	<hr>
-	<p>Already Registered?<a href="{%  url 'hometuitionapp:studentlogin' %}">Login</a></p>
-</div>
-</form>
-</div>
+
+<div class="contact-grids1 w3agile-6 registration">
+
+	<h3> Teacher Registration Form </h3>
+
+<form action="" enctype="multipart/form-data" method="post">
+	
+		<div class="row">
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Username</label>
+				{{form.username}}
+				{{form.username.errors}}
+			</div>
+			<div class="col-md-6 col-sm-6  form-group">
+				<label class="col-form-label">Email</label>
+				{{form.email}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Password</label>
+				{{form.password}}
+			</div>
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Confirm Password</label>
+				{{form.confirm_password}}
+				{{form.confirm_password.errors}}
+
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-sm-6  form-group">
+				<label class="col-form-label">Name</label>
+				{{form.name}}
+			</div>
+			<div class="col-md-6 col-sm-6  form-group">
+				<label class="col-form-label">Address</label>
+				<!-- <input type="text" class="form-control" name="address" placeholder="" required=""> -->{{form.address}}
+			</div>
+			
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Phone no</label>
+				{{form.phone_no}}
+			</div>
+			
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Photo</label>
+				<!-- <input type="file" class="form-control-file" name="photo" placeholder="" required=""> -->
+				{{form.photo}}
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Gender</label>
+				<!-- <select class="form-control" name="gender" id="" required>
+					<option value="Female"></option>
+					<option value="Male"></option>
+					<option value="Others"></option>
+					
+				</select> -->{{form.gender}}
+			</div>
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Citizenship</label>
+				<!-- <input type="file" class="form-control-file" name="citizenship" placeholder="" required=""> -->
+				{{form.citizenship}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-sm-6  form-group">
+				<label class="col-form-label">Course</label>
+					<option value="------"></option> -->
+					{{form.course}}
+			</div>
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Subject</label>
+				{{form.subject}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Education</label>
+				<!-- <input type="text" class="form-control" name="education" placeholder="" required=""> -->
+				{{form.education}}
+			</div>
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Experience</label>
+				<!-- <input type="text" class="form-control" name="experience" placeholder="" required=""> -->
+				{{form.experience}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 form-group">
+				<label class="col-form-label">CV</label>
+				<!-- <input type="file" class="form-control-file" name="cv" placeholder="" required=""> -->
+				{{form.cv}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 form-group">
+				<button type="submit" class="btn btn-primary fa-pull-right">Submit</button>
+			</div>
+			
+		</div>
+	
+
+</form>	
 </div>
 {% endblock %}
 

@@ -1,38 +1,38 @@
 {% extends "clienttemplates/base.html" %}
 {% load static %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'clientstatic/css/login.css' %}">
+	
 {% endblock %}
 {% block content %}
+<div class="contact-grids1 w3agile-6 registration">
+	<h3>Registration Form </h3>
 
-
-
-<h3>Registration Form </h3>
-
-<form action="#" method="post">
-	<div class="contact-grids1 w3agile-6">
+	<form action="#"   method="post">
+	
 		<div class="row">
-			<div class="col-md-6 col-sm-6 contact-form1 form-group">
+			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Username</label>
-				<input type="text" class="form-control" name="username" placeholder="" required="">
+				<!-- <input type="text" class="form-control" name="username" placeholder="" required=""> -->
+				{{form.username}}
 			</div>
-			<div class="col-md-6 col-sm-6 contact-form1 form-group">
+			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Email</label>
-				<input type="email" class="form-control" name="email" placeholder="" required="">
+				<!-- <input type="email" class="form-control" name="email" placeholder="" required=""> -->
+				{{form.email}}
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6 col-sm-6 contact-form1 form-group">
+			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Password</label>
 				<input type="password" class="form-control" name="Password" placeholder="" required="">
 			</div>
-			<div class="col-md-6 col-sm-6 contact-form1 form-group">
+			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Confirm Password</label>
 				<input type="password" class="form-control" name="confirmPassword" placeholder="" required="">
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6 col-sm-6 contact-form1 form-group">
+			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Name</label>
 				<input type="text" class="form-control" name="name" placeholder="" required="">
 			</div>
@@ -42,24 +42,24 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6 col-sm-6 contact-form1 form-group">
+			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Address</label>
 				<input type="text" class="form-control" name="address" placeholder="" required="">
 			</div>
-			<div class="col-md-6 col-sm-6 contact-form1 form-group">
+			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Report Card</label>
 				<input type="file" class="form-control-file" name="reportCard" placeholder="" required="">
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6 col-sm-6 contact-form1 form-group">
+			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Course</label>
 				<select class="form-control" name="course" id="" required>
 					<option value="------"></option>
 					
 				</select>
 			</div>
-			<div class="col-md-6 col-sm-6 contact-form1 form-group">
+			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Subject</label>
 				<select class="form-control" name="subject" id="" required>
 					<option value="------"></option>
@@ -68,14 +68,15 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-12 contact-form1 form-group">
-				<button type="submit" class="btn btn-primary" style="float: right; margin-bottom:20px;">Submit</button>
+			<div class="col-md-12 form-group">
+				<button type="submit" class="btn btn-primary fa-pull-right">Submit</button>
 			</div>
 			
 		</div>
-	</div>
-
-</form>	
-
+	
+	</form>
+</div>
 {% endblock %}
+
+
 
