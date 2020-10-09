@@ -1,37 +1,37 @@
 {% extends "clienttemplates/base.html" %}
-{% load bootstrap3 %}
 {% load static %}
 {% block css %}
 	
 {% endblock %}
 {% block content %}
-<<<<<<< HEAD
 
 <div class="contact-grids1 w3agile-6 registration">
 
-	<h3> Teacher Registration Form </h3>
+	<h3>Registration Form </h3>
 
-<form action="" enctype="multipart/form-data" method="post">
-	
+<form action="#" method="post">
+	<div class="contact-grids1 w3agile-6">
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Username</label>
-				{{form.username}}
+				<!-- <input type="text" class="form-control" name="username" placeholder="" required=""> -->{{form.username}}
 				{{form.username.errors}}
 			</div>
 			<div class="col-md-6 col-sm-6  form-group">
 				<label class="col-form-label">Email</label>
-				{{form.email}}
+				<!-- <input type="email" class="form-control" name="email" placeholder="" required=""> -->{{form.email}}
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Password</label>
-				{{form.password}}
+				<!-- <input type="password" class="form-control" name="Password" placeholder="" required=""> -->{{form.password}}
 			</div>
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Confirm Password</label>
+				<!-- <input type="password" class="form-control" name="confirmPassword" placeholder="" required=""> -->
 				{{form.confirm_password}}
+				
 				{{form.confirm_password.errors}}
 
 			</div>
@@ -39,17 +39,20 @@
 		<div class="row">
 			<div class="col-md-6 col-sm-6  form-group">
 				<label class="col-form-label">Name</label>
+				<!-- <input type="text" class="form-control" name="name" placeholder="" required=""> -->
 				{{form.name}}
 			</div>
 			<div class="col-md-6 col-sm-6  form-group">
 				<label class="col-form-label">Address</label>
-				<!-- <input type="text" class="form-control" name="address" placeholder="" required=""> -->{{form.address}}
+				<!-- <input type="text" class="form-control" name="address" placeholder="" required=""> -->
+				{{form.address}}
 			</div>
 			
 		</div>
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Phone no</label>
+				<!-- <input type="number" class="form-control" name="phoneno" placeholder="" required=""> -->
 				{{form.phone_no}}
 			</div>
 			
@@ -68,7 +71,8 @@
 					<option value="Male"></option>
 					<option value="Others"></option>
 					
-				</select> -->{{form.gender}}
+				</select> -->
+				{{form.gender}}
 			</div>
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Citizenship</label>
@@ -79,14 +83,25 @@
 		<div class="row">
 			<div class="col-md-6 col-sm-6  form-group">
 				<label class="col-form-label">Course</label>
+				<!-- <select class="form-control" name="course" id="" required>
 					<option value="------"></option> -->
 					{{form.course}}
+				<!-- </select> -->
 			</div>
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Subject</label>
+				<!-- <select class="form-control" name="subject" id="" required>
+					<option value="------"></option>
+					
+				</select> -->
 				{{form.subject}}
 			</div>
 		</div>
+		<!-- {%	for	field	in	form	%}
+		<div>				
+			{{	field.errors	}}		
+		</div> 
+		{%	endfor	%} -->
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Education</label>
@@ -115,30 +130,6 @@
 	
 
 </form>	
-
-<div class="login-section">
-<div class="flex-container">
-<div class="flex-group">	
-<h3>Registration Form </h3>
-</div>
-<form class="form-group" enctype="multipart/form-data" method="POST">
-<!-- Cross Site Request Forgery refers to attempts to send request from an external site while pretending to be the origin application which is often use by attackers to execute malicious actions in the server.-->
-<!-- Django protects against CSRF attacks by generating a CSRF token in the server -->
-	{% csrf_token %}
-	{% bootstrap_form form %}
-	<div class="flex-group">
-	<!-- {{form.as_p}} -->
-	</div>
-	{{error}}<br>
-	<div class="flex-group">	
-	<button type="submit" class="btn btn-primary">Submit</button>
-	<hr>
-	<p>Already Registered?<a href="{%  url 'hometuitionapp:teacherlogin' %}">Login</a></p>
-</div>
-</form>
-</div>
->>>>>>> 0747c49f114a89bf2a8b33f7fa95a270f66dee8d
 </div>
 {% endblock %}
-
 
