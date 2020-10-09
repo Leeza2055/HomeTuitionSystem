@@ -1,69 +1,124 @@
 {% extends "clienttemplates/base.html" %}
-{% load bootstrap3 %}
 {% load static %}
 {% block css %}
 	
 {% endblock %}
 {% block content %}
+
 <div class="contact-grids1 w3agile-6 registration">
+
 	<h3>Registration Form </h3>
 
-	<form action="#" method="post">
+<form action="" enctype="multipart/form-data" method="post">
 	
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Username</label>
-				<input type="text" class="form-control" name="username" placeholder="" required="">
+				<!-- <input type="text" class="form-control" name="username" placeholder="" required=""> -->{{form.username}}
+				{{form.username.errors}}
 			</div>
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Email</label>
-				<input type="email" class="form-control" name="email" placeholder="" required="">
+				<!-- <input type="email" class="form-control" name="email" placeholder="" required=""> -->{{form.email}}
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Password</label>
-				<input type="password" class="form-control" name="Password" placeholder="" required="">
+				<!-- <input type="password" class="form-control" name="Password" placeholder="" required=""> -->{{form.password}}
 			</div>
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Confirm Password</label>
-				<input type="password" class="form-control" name="confirmPassword" placeholder="" required="">
+				<!-- <input type="password" class="form-control" name="confirmPassword" placeholder="" required=""> -->
+				{{form.confirm_password}}
+				
+				{{form.confirm_password.errors}}
+
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Name</label>
-				<input type="text" class="form-control" name="name" placeholder="" required="">
+				<!-- <input type="text" class="form-control" name="name" placeholder="" required=""> -->
+				{{form.name}}
 			</div>
-			<div class="col-md-6 col-sm-6 contact-form1 form-group">
-				<label class="col-form-label">Phone no</label>
-				<input type="number" class="form-control" name="phoneno" placeholder="" required="">
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Address</label>
+				<!-- <input type="text" class="form-control" name="address" placeholder="" required=""> -->
+				{{form.address}}
 			</div>
+			
 		</div>
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
-				<label class="col-form-label">Address</label>
-				<input type="text" class="form-control" name="address" placeholder="" required="">
+				<label class="col-form-label">Phone no</label>
+				<!-- <input type="number" class="form-control" name="phoneno" placeholder="" required=""> -->
+				{{form.phone_no}}
+			</div>
+			
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Photo</label>
+				<!-- <input type="file" class="form-control-file" name="photo" placeholder="" required=""> -->
+				{{form.photo}}
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Gender</label>
+				<!-- <select class="form-control" name="gender" id="" required>
+					<option value="Female"></option>
+					<option value="Male"></option>
+					<option value="Others"></option>
+					
+				</select> -->
+				{{form.gender}}
 			</div>
 			<div class="col-md-6 col-sm-6 form-group">
-				<label class="col-form-label">Report Card</label>
-				<input type="file" class="form-control-file" name="reportCard" placeholder="" required="">
+				<label class="col-form-label">Citizenship</label>
+				<!-- <input type="file" class="form-control-file" name="citizenship" placeholder="" required=""> -->
+				{{form.citizenship}}
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Course</label>
-				<select class="form-control" name="course" id="" required>
-					<option value="------"></option>
-					
-				</select>
+				<!-- <select class="form-control" name="course" id="" required>
+					<option value="------"></option> -->
+					{{form.course}}
+				<!-- </select> -->
 			</div>
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Subject</label>
-				<select class="form-control" name="subject" id="" required>
+				<!-- <select class="form-control" name="subject" id="" required>
 					<option value="------"></option>
 					
-				</select>
+				</select> -->
+				{{form.subject}}
+			</div>
+		</div>
+		<!-- {%	for	field	in	form	%}
+		<div>				
+			{{	field.errors	}}		
+		</div> 
+		{%	endfor	%} -->
+		<div class="row">
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Education</label>
+				<!-- <input type="text" class="form-control" name="education" placeholder="" required=""> -->
+				{{form.education}}
+			</div>
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Experience</label>
+				<!-- <input type="text" class="form-control" name="experience" placeholder="" required=""> -->
+				{{form.experience}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">CV</label>
+				<!-- <input type="file" class="form-control-file" name="cv" placeholder="" required=""> -->
+				{{form.cv}}
 			</div>
 		</div>
 		<div class="row">
@@ -73,8 +128,8 @@
 			
 		</div>
 	
-	</form>
+
+</form>	
 </div>
 {% endblock %}
-
 

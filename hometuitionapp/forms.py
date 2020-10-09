@@ -5,12 +5,10 @@ from .models import *
 
 class StudentLoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={
-        "placeholder": "Enter your username..",
-        "class": "form-control",
+         "class": "form-control",
 
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
-        "placeholder": "Enter password ....",
         "class": "form-control",
 
     }))
@@ -18,17 +16,30 @@ class StudentLoginForm(forms.Form):
 
 class StudentRegisterForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
-        "placeholder": "Enter your username..",
         "class": "form-control",
 
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
-        "placeholder": "Enter your password..",
         "class": "form-control",
 
     }))
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
-        "placeholder": "Enter your password again..",
+        "class": "form-control",
+
+    }))
+    email = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    name = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    phone_no = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    address = forms.CharField(widget=forms.TextInput(attrs={
         "class": "form-control",
 
     }))
@@ -68,12 +79,41 @@ class TeacherLoginForm(forms.Form):
 
 class TeacherRegisterForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
-        "placeholder": "Enter your username..",
         "class": "form-control",
 
     }))
-    password = forms.CharField(widget=forms.PasswordInput())
-    confirm_password = forms.CharField(widget=forms.PasswordInput())
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        
+        "class": "form-control",
+    }))
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        "class": "form-control",
+
+    }))
+    email = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    name = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    address = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    phone_no = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    education = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    experience = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
 
     class Meta:
         model = Teacher
