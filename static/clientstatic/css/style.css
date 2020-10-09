@@ -1369,20 +1369,6 @@ h6.reque-title {
 
 /* //course details */
 
-/* register page */
-
-.registration {
-    margin: 20px;
-    padding: 5px;
-    border: whitesmoke 1px solid;
-    background-color: whitesmoke;
-}
-
-.registration h3 {
-    text-align: center;
-    margin-bottom: 10px;
-}
-
 /*-- contact page  --*/
 
 .con-ic i {
