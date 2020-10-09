@@ -5,12 +5,10 @@ from .models import *
 
 class StudentLoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={
-        "placeholder": "Enter your username..",
-        "class": "form-control",
+         "class": "form-control",
 
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
-        "placeholder": "Enter password ....",
         "class": "form-control",
 
     }))
@@ -85,7 +83,7 @@ class TeacherRegisterForm(forms.ModelForm):
 
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
-        "placeholder": "Enter your password..",
+        
         "class": "form-control",
     }))
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
