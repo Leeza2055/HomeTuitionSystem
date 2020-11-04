@@ -1,18 +1,21 @@
 {% extends "clienttemplates/base.html" %}
 {% load static %}
 {% block content %}
-<h3>{{teacherdetail.name}}</h3>
-<img src="{{teacherdetail.photo.url}}"/>
-<p>Gender: {{teacherdetail.gender}}</p>
-<p>Phone_no: {{teacherdetail.phone_no}}</p>
-<p>Email:{{teacherdetail.email}}</p>
-<p>Address:{{teacherdetail.address}}</p>
-<p>Education:{{teacherdetail.education}}</p>
-<p>Experience:{{teacherdetail.experience}}</p>
-<p>CV:{{teacherdetail.cv}}</p>
-<p>Citizenship:{{teacherdetail.citizenship}}</p>
-<p>Course:{{teacherdetail.course}}</p>
-<p>Subject:{{teacherdetail.subject}}</p>
+<h1>{{profile.name}}</h1>
+
+
+<!-- <h3>{{profile.name}}</h3> -->
+<img src="{{profile.photo.url}}"/>
+<p>Gender: {{profile.gender}}</p>
+<p>Phone_no: {{profile.phone_no}}</p>
+<p>Email:{{profile.email}}</p>
+<p>Address:{{profile.address}}</p>
+<p>Education:{{profile.education}}</p>
+<p>Experience:{{profile.experience}}</p>
+<p>CV:{{profile.cv}}</p>
+<p>Citizenship:{{profile.citizenship}}</p>
+<p>Course:{{profile.course}}</p>
+<p>Subject:{{profile.subject}}</p>
 {% endblock %}
 
 

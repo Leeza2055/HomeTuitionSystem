@@ -1,7 +1,6 @@
 {% extends "clienttemplates/base.html" %}
 {% load static %}
 {% block css %}
-
 {% endblock %}
 {% block content %}
 
@@ -10,7 +9,7 @@
 	<h3>Registration Form </h3>
 
 <form action="" enctype="multipart/form-data" method="post">
-	
+	{% csrf_token %}
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Username</label>

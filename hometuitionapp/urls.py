@@ -1,5 +1,11 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls import url
 from .views import *
+from . import views
+# from .tokens import account_activation_token
+
 app_name = 'hometuitionapp'
 urlpatterns = [
     # client side
@@ -10,16 +16,34 @@ urlpatterns = [
     path('student/login/', StudentLoginView.as_view(), name="studentlogin"),
     path('student/register/', StudentRegisterView.as_view(), name="studentregister"),
     path('teacher/login/', TeacherLoginView.as_view(), name="teacherlogin"),
-    path('teacher/register/', TeacherRegisterView.as_view(), name="teacherregister"),
-    path('teacher/home', TeacherHomeView.as_view(),name="teacherhome"),
+    path('teacher/register/', TeacherRegisterView.as_view(),
+         name="teacherregister"),
+    # path('activate/<uid>/<token>/', ActivateAccount.as_view(), name='activate'),
+    # url(r'^teacher/register/$', views.teacherregister, name='teacherregister'),
+    # url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+    #     views.activate, name='activate'),
+    path('teacher/home/', TeacherHomeView.as_view(), name="teacherhome"),
     path('student/home/', StudentHomeView.as_view(), name="studenthome"),
-
-    # path('teacher/<int:pk>/profile/', TeacherProfileView.as_view(), name="teacherprofile"),
+    # path('confirm-email/<str:user_id>/<str:token>/',
+    #      views.ConfirmRegistrationView.as_view(), name='confirm_email'),
+    # path('reset-password/', auth_views.PasswordResetView.as_view(
+    #      template_name='clienttemplates/reset_password.html',
+    #      html_email_template_name='clienttemplates/reset_password_email.html',
+    #      success_url=settings.TEACHER_LOGIN_URL,
+    #      token_generator=user_tokenizer),
+    #      name='reset_password'),
+    # path('reset-password-confirmation/<str:uidb64>/<str:token>/',
+    #      auth_views.PasswordResetConfirmView.as_view(
+    #          template_name='clienttmplates/reset_password_update.html',
+    #          post_reset_login=True,
+    #          post_reset_login_backend='django.contrib.auth.backends.ModelBackend',
+    #          token_generator=user_tokenizer,
+    #          success_url=settings.TEACHER_LOGIN_REDIRECT_URL),
+    #      name='password_reset_confirm'),
+    path('teacher/<int:pk>/profile/',
+         TeacherProfileView.as_view(), name="teacherprofile"),
     # path("search/", SearchView.as_view(), name="search"),
     path('logout/', LogoutView.as_view(), name="logout"),
-
-
-
 
 
     # admin side
@@ -64,10 +88,5 @@ urlpatterns = [
     path('system_admin/teacher/<int:pk>/update',
          AdminTeacherUpdateView.as_view(), name="adminteacherupdate"),
     path('system_admin/teacher/<int:pk>delete',
-         AdminTeacherDeleteView.as_view(), name="adminteacherdelete")
-
-
-
-
-
+         AdminTeacherDeleteView.as_view(), name="adminteacherdelete"),
 ]
