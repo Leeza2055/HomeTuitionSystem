@@ -1,4 +1,15 @@
-{% extends "clienttemplated/base.html" %}
+{% extends "clienttemplates/base.html" %}
 {% load static %}
 {% block content %}
+{% for teacher in teacherlist %}
+	<img src="{{teacher.photo.url}}"/>
+	<h1><a href="{% url 'hometuitionapp:teacherprofile' teacher.pk %}">{{teacher.name}}</a></h1>
+	<h2>Education:{{teacher.education}}</h2>
+	<h2>Experience: {{teacher.experience}} </h2>
+
+
+
+                                       
+                                   
+                            {% endfor %}
 {% endblock %}
