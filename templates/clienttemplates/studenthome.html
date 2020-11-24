@@ -1,15 +1,16 @@
 {% extends "clienttemplates/base.html" %}
 {% load static %}
 {% block content %}
-{% for teacher in teacherlist %}
-	<img src="{{teacher.photo.url}}"/>
-	<h1><a href="{% url 'hometuitionapp:teacherprofile' teacher.pk %}">{{teacher.name}}</a></h1>
-	<h2>Education:{{teacher.education}}</h2>
-	<h2>Experience: {{teacher.experience}} </h2>
-
-
-
-                                       
-                                   
-                            {% endfor %}
+<a href="{% url 'hometuitionapp:logout' %}">Logout</a>
+<h1 style="text-align: center;">Teacher List</h1>
+<div class="container row mt-2 mb-2" style="width: 70%; margin-left: auto; margin-right: auto;">
+	{% for teacher in teacherlist %}
+	<div class="col-4">
+		<img src="{{teacher.photo.url}}"/>
+		<h1><a href="{% url 'hometuitionapp:teacherprofile' teacher.pk %}">{{teacher.name}}</a></h1>
+		<h2>Education:{{teacher.education}}</h2>
+		<h2>Experience: {{teacher.experience}} </h2>
+	</div>
+	{% endfor %}
+</div>
 {% endblock %}

@@ -78,6 +78,15 @@ class Teacher(TimeStamp):
     def __str__(self):
         return self.name
 
+class Rating(models.Model):
+    teacher = models.ForeignKey(Teacher,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True)
+    rate = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.rate
 
 class Student(TimeStamp):
     user = models.OneToOneField(

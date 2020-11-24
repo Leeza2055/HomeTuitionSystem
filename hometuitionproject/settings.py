@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'hometuitionproject.wsgi.application'
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #         'NAME': 'tuitiondb',
 #         'USER': 'postgres',
-#         'PASSWORD': 'leeza@123',
+#         'PASSWORD': 'sanish123',
 #         'HOST': 'localhost',
 #         'PORT': '5432',
 

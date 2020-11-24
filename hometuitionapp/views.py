@@ -17,6 +17,7 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponseRedirect
 # from .tokens import account_activation_token
 
 
@@ -55,6 +56,7 @@ class StudentLoginView(FormView):
         uname = form.cleaned_data["username"]
         pword = form.cleaned_data["password"]
         user = authenticate(username=uname, password=pword)
+        print(user)
         if user is not None:
             login(self.request, user)
         else:
@@ -272,6 +274,7 @@ class TeacherHomeView(TemplateView):
 class TeacherProfileView(DetailView):
     template_name = "clienttemplates/teacherprofile.html"
     model = Teacher
+    form_class = RatingForm
     context_object_name = "profile"
 
     def get_context_data(self, **kwargs):
@@ -280,6 +283,37 @@ class TeacherProfileView(DetailView):
         teacher = Teacher.objects.get(id=teacher_id)
 
         return context
+
+    def post(self, request, **kwargs):
+        url = request.META.get('HTTP_REFERER') #GET last url
+        form = self.form_class(request.POST)
+        print(self.request)
+        if form.is_valid():
+            data = Rating() #create relation with model
+            data.rate = form.cleaned_data['rate']
+            teacher_id = self.kwargs["pk"]
+            data.teacher = Teacher.objects.get(id=teacher_id)
+            try:
+                print(self.request)
+                # data.user = User.objects.get(user=self.request.user)
+                current_user = request.user
+                print(current_user)
+                data.user = current_user.id
+                print(data.user)
+            except:
+                print("except")
+            # current_user = request.user
+            # print(current_user, '\n ++++++++++++++++++++++++')
+            # data.user_id = current_user.id
+            data.save()
+            messages.success(request,"Your review has been sent")
+            return HttpResponseRedirect(url)
+        else:
+            return render(self.request, url)
+
+    # if request.method == 'POST':
+    #     form = RateForm(request.POST, i)
+
 
 
 # class SearchView(TemplateView):

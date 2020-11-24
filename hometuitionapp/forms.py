@@ -134,6 +134,11 @@ class TeacherRegisterForm(forms.ModelForm):
             raise forms.ValidationError("Password did not match")
         return c_pword
 
+class RatingForm(forms.ModelForm):
+    class Meta:
+        model = Rating
+        fields = ['rate']
+
 
 class HomeTuitionSystemForm(forms.ModelForm):
     class Meta:
