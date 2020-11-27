@@ -89,4 +89,6 @@ urlpatterns = [
          AdminTeacherUpdateView.as_view(), name="adminteacherupdate"),
     path('system_admin/teacher/<int:pk>delete',
          AdminTeacherDeleteView.as_view(), name="adminteacherdelete"),
+    path('adminlogout/', AdminLogoutView.as_view(), name="adminlogout"),
+
 ]
