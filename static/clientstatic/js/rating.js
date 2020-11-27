@@ -18,14 +18,20 @@ console.log(form.getElementsByTagName('label'));
 const handleStarSelect = (size) => {
     const children = form.getElementsByTagName('label');
     // console.log(children[0]);
+    let regularCheckedStar = ['far', 'fa-star', 'checked'];
+    let solidCheckedStar = ['fas', 'fa-star', 'checked']; 
     for (let i=0; i< children.length; i++) {
-        if(i < size){
-            children[i].classList.add('checked')
+        if(i < size){            
+            // children[i].classList.add('fas', 'fa-star', 'checked');
+            // children[i].classList.remove('far', 'fa-star', 'checked');
             // console.log(children[i]);
+            children[i].classList.add('checked');
         }
         else{
-            children[i].classList.remove('checked')
+            // children[i].classList.remove('fas', 'fa-star', 'checked');
+            // children[i].classList.add('far', 'fa-star', 'checked');
             // console.log(children[i]);
+            children[i].classList.remove('checked');
         }
     }
 }

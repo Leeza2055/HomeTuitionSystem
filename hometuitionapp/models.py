@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
+from django.db.models import Avg, Count
 # # Create your models here.
 
 # # This model will not be used to create database table instead it is used as a base class for other models
@@ -77,6 +78,23 @@ class Teacher(TimeStamp):
 
     def __str__(self):
         return self.name
+
+# function for calculating the average rate of teacher
+    def averagerating(self):
+        ratings = Rating.objects.filter(teacher=self).aggregate(average=Avg("rate"))
+        avg=0
+        if ratings["average"] is not None:
+            avg = float(ratings["average"])
+        return avg
+
+#function for counting the total number of rating
+    def countrating(self):
+        ratings = Rating.objects.filter(teacher=self).aggregate(count=Count("id"))
+        cnt=0
+        if ratings["count"] is not None:
+            cnt = int(ratings["count"])
+        return cnt
+
 
 class Rating(models.Model):
     teacher = models.ForeignKey(Teacher,on_delete=models.CASCADE)
