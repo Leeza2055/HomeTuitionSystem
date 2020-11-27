@@ -21,6 +21,15 @@
 	<button type="submit" class="btn btn-primary">Login</button>
 	<hr>
 	<p>Not Registered Yet!<a href="{%  url 'hometuitionapp:studentregister' %}">Register here</a></p>
+	{% if messages %}
+    	<div class="col-lg-3 color03">
+        	<ul class="messages">
+            	{% for message in messages %}
+                	<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            	{% endfor %}
+        	</ul>
+    	</div>
+	{% endif %}
 </div>
 </form>
 </div>

@@ -17,16 +17,25 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
+
 # from .tokens import account_activation_token
 
 
-# class TeacherRequiredMixin(object):
-#     def dispatch(self, request, *args, **kwargs):
-#         if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
-#             pass
-#         else:
-#             return redirect("/login/")
-#         return super().dispatch(request, *args, **kwargs)
+class TeacherRequiredMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
+            pass
+        else:
+            return redirect('/login/')
+        return super().dispatch(request, *args, **kwargs)
+
+class StudentRequiredMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.groups.filter(name="student").exists():
+            pass
+        else:
+            return redirect("/login/")
+        return super().dispatch(request, *args, **kwargs)
 
 
 class HomeView(TemplateView):
@@ -64,12 +73,19 @@ class StudentLoginView(FormView):
                           })
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('/student/home/')
+        else:
+            pass
+        return super().dispatch(request, *args, **kwargs)
 
-class StudentRegisterView(CreateView):
+
+class StudentRegisterView(SuccessMessageMixin, CreateView):
     template_name = "clienttemplates/studentregister.html"
     form_class = StudentRegisterForm
     success_url = reverse_lazy("hometuitionapp:studentlogin")
-    success_message = "Successfully registered"
+    success_message = "%(username)s was Successfully registered" 
 
     def form_valid(self, form):
         uname = form.cleaned_data['username']
@@ -77,8 +93,16 @@ class StudentRegisterView(CreateView):
         email = form.cleaned_data['email']
         user = User.objects.create_user(uname, email, password)
         form.instance.user = user
-
         return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('/student/home/')
+        else:
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
+    
 
 
 class TeacherLoginView(FormView):
@@ -87,6 +111,7 @@ class TeacherLoginView(FormView):
     success_url = reverse_lazy("hometuitionapp:teacherhome")
 
     # validating username and password by form_valid method using cleaned_data
+
     def form_valid(self, form):
         uname = form.cleaned_data["username"]
         pword = form.cleaned_data["password"]
@@ -101,15 +126,22 @@ class TeacherLoginView(FormView):
                           })
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
+            return redirect('/teacher/home/')
+        else:
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
     # def get_success_url(self):
     #     return reverse_lazy('teacherprofile', kwargs={"pk": self.object.pk})
 
 
-class TeacherRegisterView(CreateView):
+class TeacherRegisterView(SuccessMessageMixin, CreateView):
     template_name = "clienttemplates/teacherregister.html"
     form_class = TeacherRegisterForm
     success_url = reverse_lazy("hometuitionapp:teacherlogin")
-    success_message = "Successfully registered"
+    success_message = " %(username)s was Successfully registered"
 
     def form_valid(self, form):
         uname = form.cleaned_data['username']
@@ -118,6 +150,15 @@ class TeacherRegisterView(CreateView):
         user = User.objects.create_user(uname, email, password)
         form.instance.user = user
         return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
+            return redirect('/teacher/home/')
+        else:
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
+    
 
 # class TeacherRegisterView(View):
 #     def get(self, request):
@@ -257,7 +298,7 @@ class TeacherRegisterView(CreateView):
 #             return redirect('teacher/register/')
 
 
-class StudentHomeView(ListView):
+class StudentHomeView(StudentRequiredMixin, ListView):
     template_name = "clienttemplates/studenthome.html"
     queryset = Teacher.objects.all().order_by("-id")
     context_object_name = "teacherlist"
@@ -265,9 +306,10 @@ class StudentHomeView(ListView):
 
 
 
-class TeacherHomeView(TemplateView):
+class TeacherHomeView(TeacherRequiredMixin, TemplateView):
     template_name = "clienttemplates/teacherhome.html"
 
+    
 
 class TeacherProfileView(DetailView):
     template_name = "clienttemplates/teacherprofile.html"
@@ -298,7 +340,7 @@ class TeacherProfileView(DetailView):
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        return redirect("/")
+        return redirect("/login")
 
 
 # class AdminRequiredMixin(object):

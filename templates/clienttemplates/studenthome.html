@@ -1,6 +1,10 @@
 {% extends "clienttemplates/base.html" %}
 {% load static %}
 {% block content %}
+<h3>Welcome {{request.user}}</h3>
+
+<a href="{% url 'hometuitionapp:logout' %}">Logout</a>
+
 {% for teacher in teacherlist %}
 	<img src="{{teacher.photo.url}}"/>
 	<h1><a href="{% url 'hometuitionapp:teacherprofile' teacher.pk %}">{{teacher.name}}</a></h1>
