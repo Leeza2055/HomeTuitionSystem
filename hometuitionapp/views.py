@@ -343,14 +343,14 @@ class LogoutView(View):
         return redirect("/login")
 
 
-# class AdminRequiredMixin(object):
-#     def dispatch(self, request, *args, **kwargs):
-#         if not request.user.is_superuser:
-#             return redirect("/adminlogin/")
-#         return super().dispatch(request, *args, **kwargs)
+class AdminRequiredMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return redirect("/adminlogin/")
+        return super().dispatch(request, *args, **kwargs)
 
 
-class AdminHomeView(TemplateView):
+class AdminHomeView(AdminRequiredMixin, TemplateView):
     template_name = "admintemplates/adminhome.html"
 
 
@@ -373,102 +373,102 @@ class AdminLoginView(FormView):
         return super().form_valid(form)
 
 
-class AdminHomeTuitionSystemDetailView(DetailView):
+class AdminHomeTuitionSystemDetailView(AdminRequiredMixin, DetailView):
     template_name = "admintemplates/adminsystemdetail.html"
     model = HomeTuitionSystem
     # this context_object_name is used to display data for eg{{systemdetail.name}} will display name of the system
     context_object_name = "systemdetail"
 
 
-class AdminHomeTuitionSystemUpdateView(UpdateView):
+class AdminHomeTuitionSystemUpdateView(AdminRequiredMixin, UpdateView):
     template_name = "admintemplates/adminsystemupdate.html"
     form_class = HomeTuitionSystemForm
     success_url = reverse_lazy("hometuitionapp:adminhome")
     model = HomeTuitionSystem
 
 
-class AdminCourseListView(ListView):
+class AdminCourseListView(AdminRequiredMixin, ListView):
     template_name = "admintemplates/admincourselist.html"
     queryset = Course.objects.all().order_by("-id")
     context_object_name = "courselist"
 
 
-class AdminCourseCreateView(CreateView):
+class AdminCourseCreateView(AdminRequiredMixin, CreateView):
     template_name = "admintemplates/admincoursecreate.html"
     form_class = CourseForm
     success_url = reverse_lazy("hometuitionapp:admincourselist")
 
 
-class AdminCourseUpdateView(UpdateView):
+class AdminCourseUpdateView(AdminRequiredMixin, UpdateView):
     template_name = "admintemplates/admincourseupdate.html"
     form_class = CourseForm
     success_url = reverse_lazy("hometuitionapp:admincourselist")
     model = Course
 
 
-class AdminCourseDeleteView(DeleteView):
+class AdminCourseDeleteView(AdminRequiredMixin, DeleteView):
     template_name = "admintemplates/admincoursedelete.html"
     success_url = reverse_lazy("hometuitionapp:admincourselist")
     model = Course
 
 
-class AdminSubjectListView(ListView):
+class AdminSubjectListView(AdminRequiredMixin, ListView):
     template_name = "admintemplates/adminsubjectlist.html"
     queryset = Subject.objects.all().order_by("-id")
     context_object_name = "subjectlist"
 
 
-class AdminSubjectCreateView(CreateView):
+class AdminSubjectCreateView(AdminRequiredMixin, CreateView):
     template_name = "admintemplates/adminsubjectcreate.html"
     form_class = SubjectForm
     success_url = reverse_lazy("hometuitionapp:adminsubjectlist")
 
 
-class AdminSubjectUpdateView(UpdateView):
+class AdminSubjectUpdateView(AdminRequiredMixin, UpdateView):
     template_name = "admintemplates/adminsubjectupdate.html"
     form_class = SubjectForm
     success_url = reverse_lazy("hometuitionapp:adminsubjectlist")
     model = Subject
 
 
-class AdminSubjectDeleteView(DeleteView):
+class AdminSubjectDeleteView(AdminRequiredMixin, DeleteView):
     template_name = "admintemplates/adminsubjectdelete.html"
     success_url = reverse_lazy("hometuitionapp:adminsubjectlist")
     model = Subject
 
 
-class AdminStudentListView(ListView):
+class AdminStudentListView(AdminRequiredMixin, ListView):
     template_name = "admintemplates/adminstudentlist.html"
     queryset = Student.objects.all().order_by("-id")
     context_object_name = "studentlist"
 
 
-class AdminStudentDetailView(DetailView):
+class AdminStudentDetailView(AdminRequiredMixin, DetailView):
     template_name = "admintemplates/adminstudentdetail.html"
     model = Student
     context_object_name = "studentdetail"
 
 
-class AdminStudentUpdateView(UpdateView):
+class AdminStudentUpdateView(AdminRequiredMixin, UpdateView):
     template_name = "admintemplates/adminstudentupdate.html"
     form_class = StudentRegisterForm
     success_url = reverse_lazy("hometuitionapp:adminstudentlist")
     model = Student
 
 
-class AdminStudentDeleteView(DeleteView):
+class AdminStudentDeleteView(AdminRequiredMixin, DeleteView):
     template_name = "admintemplates/adminstudentdelete.html"
     success_url = reverse_lazy("hometuitionapp:adminstudentlist")
     model = Student
 
 
-class AdminTeacherListView(ListView):
+class AdminTeacherListView(AdminRequiredMixin, ListView):
     template_name = "admintemplates/adminteacherlist.html"
     queryset = Teacher.objects.all().order_by("-id")
     context_object_name = "teacherlist"
 
 
-class AdminTeacherUpdateView(UpdateView):
+class AdminTeacherUpdateView(AdminRequiredMixin, UpdateView):
     template_name = "admintemplates/adminteacherupdate.html"
     form_class = TeacherRegisterForm
     success_url = reverse_lazy("hometuitionapp:adminteacherlist")
@@ -481,14 +481,13 @@ class AdminTeacherDeleteView(DeleteView):
     model = Teacher
 
 
-class AdminTeacherDetailView(DetailView):
+class AdminTeacherDetailView(AdminRequiredMixin, DetailView):
     template_name = "admintemplates/adminteacherdetail.html"
     model = Teacher
     context_object_name = "teacherdetail"
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     teacher_id = self.kwargs["pk"]
-    #     teacher = Teacher.objects.get(id=teacher_id)
-
-    #     return context
+class AdminLogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect("/adminlogin/")
+    
