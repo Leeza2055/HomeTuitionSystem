@@ -1,4 +1,5 @@
 from django.views.generic import *
+from django.views import generic
 from .models import *
 from django.db.models import Q
 from django.urls import reverse_lazy
@@ -261,10 +262,59 @@ class TeacherRegisterView(CreateView):
 
 class StudentHomeView(ListView):
     template_name = "clienttemplates/studenthome.html"
-    queryset = Teacher.objects.all().order_by("-id")
-    context_object_name = "teacherlist"
 
+    def get(self, request):
+        qs = Teacher.objects.all()
+        subject_query = request.GET.get('subject')
+        location_query = request.GET.get('location')
+        
+        if (subject_query != '' and location_query != '') and (subject_query is not None and location_query is not None):
+            qset = qs.filter(Q(subject__name__icontains=subject_query), Q(address__icontains=location_query)).distinct()
+            print(qset)
+            if not qset:
+                queryset = qs.order_by("-id")
+                messages.error(request, "No results found.")          
+                return render(request, "clienttemplates/studenthome.html", {
+                    'queryset' : queryset
+                })  
+            else:
+                return render(request, "clienttemplates/studenthome.html", {
+                    'queryset' : qset
+                })
 
+        elif subject_query != '' and subject_query is not None:
+            qset = qs.filter(subject__name__icontains=subject_query) 
+            if not qset:
+                queryset = qs.order_by("-id")  
+                messages.error(request, "No results found.")        
+                return render(request, "clienttemplates/studenthome.html", {
+                    'queryset' : queryset
+                })
+            else:
+                return render(request, "clienttemplates/studenthome.html", {
+                    'queryset' : qset
+                })
+
+        elif location_query != '' and location_query is not None:
+            qset = qs.filter(address__icontains=location_query)
+            if not qset:
+                queryset = qs.order_by("-id")
+                messages.error(request, "No results found.")          
+                return render(request, "clienttemplates/studenthome.html", {
+                    'queryset' : queryset
+                })  
+            else:
+                return render(request, "clienttemplates/studenthome.html", {
+                    'queryset' : qset
+                })
+
+        else:
+            qset = qs.order_by("-id")          
+            return render(request, "clienttemplates/studenthome.html", {
+                'queryset' : qset
+            })
+        
+        
 
 
 class TeacherHomeView(TemplateView):
