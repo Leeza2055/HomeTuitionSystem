@@ -141,7 +141,7 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
     template_name = "clienttemplates/teacherregister.html"
     form_class = TeacherRegisterForm
     success_url = reverse_lazy("hometuitionapp:teacherlogin")
-    success_message = " A confirmation email has been sent to %(email)s. Please confirm to finish registering"
+    success_message =  "%(username)s was Successfully registered" 
 
     def form_valid(self, form):
         uname = form.cleaned_data['username']
