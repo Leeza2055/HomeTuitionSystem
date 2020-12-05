@@ -18,7 +18,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 
-# from .tokens import account_activation_token
+from .tokens import user_tokenizer
 
 
 class TeacherRequiredMixin(object):
@@ -74,7 +74,7 @@ class StudentLoginView(FormView):
         return super().form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and request.user.groups.filter(name="student").exists():
             return redirect('/student/home/')
         else:
             pass
@@ -96,7 +96,7 @@ class StudentRegisterView(SuccessMessageMixin, CreateView):
         return super().form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and request.user.groups.filter(name="student").exists():
             return redirect('/student/home/')
         else:
             pass
@@ -141,7 +141,7 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
     template_name = "clienttemplates/teacherregister.html"
     form_class = TeacherRegisterForm
     success_url = reverse_lazy("hometuitionapp:teacherlogin")
-    success_message = " %(username)s was Successfully registered"
+    success_message = " A confirmation email has been sent to %(email)s. Please confirm to finish registering"
 
     def form_valid(self, form):
         uname = form.cleaned_data['username']
@@ -167,6 +167,10 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
 #     def post(self, request):
 #         form = TeacherRegisterForm(request.POST)
 #         if form.is_valid():
+#             uname = form.cleaned_data['username']
+#             password = form.cleaned_data['password']
+#             email = form.cleaned_data['email']
+#             user = User.objects.create_user(uname, email, password)
 #             user = form.save(commit=False)
 #             user.is_valid = False
 #             user.save()
@@ -196,7 +200,7 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
 #         user = User.objects.get(pk=user_id)
 
 #         context = {
-#             'form': AuthenticationForm(),
+#             'form': TeacherLoginForm(),
 #             'message': 'Registration confirmation error. Please click the reset password to generate a new confirmation email.'
 #         }
 
@@ -303,6 +307,17 @@ class StudentHomeView(StudentRequiredMixin, ListView):
     queryset = Teacher.objects.all().order_by("-id")
     context_object_name = "teacherlist"
 
+class TeacherProfileView(StudentRequiredMixin,DetailView):
+    template_name = "clienttemplates/teacherprofile.html"
+    model = Teacher
+    context_object_name = "profile"
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     teacher_id = self.kwargs["pk"]
+    #     teacher = Teacher.objects.get(id=teacher_id)
+
+    #     return context
 
 
 
@@ -311,18 +326,37 @@ class TeacherHomeView(TeacherRequiredMixin, TemplateView):
 
     
 
-class TeacherProfileView(DetailView):
-    template_name = "clienttemplates/teacherprofile.html"
+class TeacherDetailView(TeacherRequiredMixin,DetailView):
+    template_name = "clienttemplates/teacherdetail.html"
     model = Teacher
-    context_object_name = "profile"
+    context_object_name = "teacherdetail"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        teacher_id = self.kwargs["pk"]
-        teacher = Teacher.objects.get(id=teacher_id)
+class TeacherDeleteView(TeacherRequiredMixin,DeleteView):
+    template_name = "clienttemplates/teacherdelete.html"
+    success_url = reverse_lazy("hometuitionapp:teacherregister")
+    model = Teacher
 
-        return context
+class TeacherUpdateView(TeacherRequiredMixin, UpdateView):
+    template_name = "clienttemplates/teacherupdate.html"
+    form_class = TeacherUpdateForm
+    success_url = reverse_lazy("hometuitionapp:teacherhome")
+    model = Teacher
 
+class StudentDetailView(StudentRequiredMixin,DetailView):
+    template_name = "clienttemplates/studentdetail.html"
+    model = Student
+    context_object_name = "studentdetail"
+
+class StudentDeleteView(StudentRequiredMixin,DeleteView):
+    template_name = "clienttemplates/studentdelete.html"
+    success_url = reverse_lazy("hometuitionapp:studentregister")
+    model = Student
+
+class StudentUpdateView(StudentRequiredMixin, UpdateView):
+    template_name = "clienttemplates/studentupdate.html"
+    form_class = StudentUpdateForm
+    success_url = reverse_lazy("hometuitionapp:studenthome")
+    model = Student
 
 # class SearchView(TemplateView):
 #     template_name = "clienttemplates/searchresult.html"

@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <h3>Welcome {{request.user}}</h3>
-<a href="{% url 'hometuitionapp:teacherprofile' request.user.teacher.id %}">Profile</a>
+<a href="{% url 'hometuitionapp:teacherdetail' request.user.teacher.id %}">Profile</a>
 
 
 

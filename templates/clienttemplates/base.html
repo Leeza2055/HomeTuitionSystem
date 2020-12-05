@@ -109,25 +109,11 @@
 			</button>
 			<div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
 				<ul class="navbar-nav justify-content-center">
-					{% if request.user.group == teacher %}
-					<li class="nav-item active">
-						<a class="nav-link text-white" href="{% url 'hometuitionapp:teacherhome' %}">Home
-							<span class="sr-only">(current)</span>
-						</a>
-					</li>
-					{% elif request.user.group == student %}
-					<li class="nav-item active">
-						<a class="nav-link text-white" href="{% url 'hometuitionapp:studenthome' %}">Home
-							<span class="sr-only">(current)</span>
-						</a>
-					</li>
-					{% else %}
 					<li class="nav-item active">
 						<a class="nav-link text-white" href="{% url 'hometuitionapp:home' %}">Home
 							<span class="sr-only">(current)</span>
 						</a>
 					</li>
-					{% endif %}
 					<li class="nav-item">
 						<a class="nav-link text-white" href="{% url 'hometuitionapp:aboutus' %}">About Us</a>
 					</li>
