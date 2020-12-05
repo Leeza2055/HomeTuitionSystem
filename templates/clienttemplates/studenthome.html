@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 <h3>Welcome {{request.user}}</h3>
+<a href="{% url 'hometuitionapp:studentdetail' request.user.student.id %}">Profile</a>
 
 <a href="{% url 'hometuitionapp:logout' %}">Logout</a>
 

@@ -134,6 +134,59 @@ class TeacherRegisterForm(forms.ModelForm):
             raise forms.ValidationError("Password did not match")
         return c_pword
 
+class TeacherUpdateForm(forms.ModelForm):
+    email = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    name = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    address = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    phone_no = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    education = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    experience = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+
+    class Meta:
+        model = Teacher
+        fields = ['email','name', 'gender', 'photo',
+                  'phone_no', 'address', 'education', 'experience', 'cv', 'citizenship', 'course', 'subject']
+
+class StudentUpdateForm(forms.ModelForm):
+    email = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    name = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    phone_no = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+    address = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "form-control",
+
+    }))
+
+    class Meta:
+        model = Student
+        fields = ['email', 'name','phone_no', 'address', 'report_card', 'course', 'subject']
+
 
 class HomeTuitionSystemForm(forms.ModelForm):
     class Meta:
