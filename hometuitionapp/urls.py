@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls import url
 from .views import *
 from . import views
-# from .tokens import account_activation_token
+from .tokens import user_tokenizer
 
 app_name = 'hometuitionapp'
 urlpatterns = [
@@ -12,12 +12,13 @@ urlpatterns = [
     path('', HomeView.as_view(), name="home"),
     path("aboutus/", AboutusView.as_view(), name="aboutus"),
     path("contactus/", ContactusView.as_view(), name="contactus"),
-    path('login/', LoginView.as_view(), name='login'),
+    path('login/', LoginView.as_view(), name="login"),
     path('student/login/', StudentLoginView.as_view(), name="studentlogin"),
     path('student/register/', StudentRegisterView.as_view(), name="studentregister"),
     path('teacher/login/', TeacherLoginView.as_view(), name="teacherlogin"),
     path('teacher/register/', TeacherRegisterView.as_view(),
          name="teacherregister"),
+    # path('teacher/register/', views.TeacherRegisterView.as_view(), name='teacherregister'),
     # path('activate/<uid>/<token>/', ActivateAccount.as_view(), name='activate'),
     # url(r'^teacher/register/$', views.teacherregister, name='teacherregister'),
     # url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
@@ -42,6 +43,18 @@ urlpatterns = [
     #      name='password_reset_confirm'),
     path('teacher/<int:pk>/profile/',
          TeacherProfileView.as_view(), name="teacherprofile"),
+    path('teacher/<int:pk>/detail/',
+         TeacherDetailView.as_view(), name="teacherdetail"),
+    path('teacher/<int:pk>/update/',
+         TeacherUpdateView.as_view(), name="teacherupdate"),
+    path('teacher/<int:pk>/delete/',
+         TeacherDeleteView.as_view(), name="teacherdelete"),
+    path('student/<int:pk>/detail/',
+         StudentDetailView.as_view(), name="studentdetail"),
+    path('student/<int:pk>/update/',
+         StudentUpdateView.as_view(), name="studentupdate"),
+    path('student/<int:pk>/delete/',
+         TeacherDeleteView.as_view(), name="studentdelete"),
     # path("search/", SearchView.as_view(), name="search"),
     path('logout/', LogoutView.as_view(), name="logout"),
 
@@ -92,4 +105,6 @@ urlpatterns = [
 
      path('system_admin/ajax/search/', 
      AdminAjaxTeacherSearchView.as_view(), name='adminajaxteachersearch'),
+    path('adminlogout/', AdminLogoutView.as_view(), name="adminlogout"),
+
 ]

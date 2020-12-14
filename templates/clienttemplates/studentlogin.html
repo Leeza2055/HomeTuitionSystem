@@ -7,7 +7,7 @@
 <div class="login-section">
 <div class="flex-container">
 <div class="flex-group">	
-<h3>Login </h3>
+<h3>Student Login </h3>
 </div>
 <form class="form-group" method="POST">
 <!-- Cross Site Request Forgery refers to attempts to send request from an external site while pretending to be the origin application which is often use by attackers to execute malicious actions in the server.-->
@@ -21,6 +21,15 @@
 	<button type="submit" class="btn btn-primary">Login</button>
 	<hr>
 	<p>Not Registered Yet!<a href="{%  url 'hometuitionapp:studentregister' %}">Register here</a></p>
+	{% if messages %}
+    	<div class="col-lg-3 color03">
+        	<ul class="messages">
+            	{% for message in messages %}
+                	<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            	{% endfor %}
+        	</ul>
+    	</div>
+	{% endif %}
 </div>
 </form>
 </div>

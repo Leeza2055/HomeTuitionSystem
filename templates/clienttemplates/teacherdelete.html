@@ -1,0 +1,11 @@
+{% extends "clienttemplates/base.html" %}
+{% block content %}
+<h4>Delete Form</h4>
+<form method="POST">
+	{% csrf_token %}
+	<h4>Do you want to delete this?</h4>
+	<button>Yes</button>
+	<button><a href="{% url 'hometuitionapp:teacherhome' %}">No</button>	
+
+</form>
+{% endblock %}

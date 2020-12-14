@@ -1,7 +1,8 @@
 {% extends "clienttemplates/base.html" %}
 {% load static %}
 {% block content %}
-<h3>Welcome</h3>
+<h3>Welcome {{request.user}}</h3>
+<a href="{% url 'hometuitionapp:teacherdetail' request.user.teacher.id %}">Profile</a>
 
 
 
