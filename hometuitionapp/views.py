@@ -1,4 +1,5 @@
 from django.views.generic import *
+from django.views import generic
 from .models import *
 from django.db.models import Q
 from django.urls import reverse_lazy
@@ -9,6 +10,7 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.mail import EmailMessage
+from django.core.paginator import Paginator
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -17,6 +19,12 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponseRedirect
+# from .tokens import account_activation_token
+
+from django.http import JsonResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 from .tokens import user_tokenizer
 
@@ -64,6 +72,7 @@ class StudentLoginView(FormView):
         uname = form.cleaned_data["username"]
         pword = form.cleaned_data["password"]
         user = authenticate(username=uname, password=pword)
+        print(user)
         if user is not None:
             login(self.request, user)
         else:
@@ -121,9 +130,9 @@ class TeacherLoginView(FormView):
 
         else:
             return render(self.request, 'clienttemplates/teacherlogin.html',
-                          {
-                              "error": "Invalid username or password", "form": form
-                          })
+                        {
+                            "error": "Invalid username or password", "form": form
+                        })
         return super().form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):
@@ -149,8 +158,26 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
         email = form.cleaned_data['email']
         user = User.objects.create_user(uname, email, password)
         form.instance.user = user
+
+        # LoginToken.object.create(user=user, token_value="Token"+user.id)
+        # send_mail = 
+        
         return super().form_valid(form)
 
+
+# class TeacherRegisterView(CreateView):
+#     template_name = "clienttemplates/teacherregister.html"
+#     form_class = TeacherRegisterForm
+#     success_url = reverse_lazy("hometuitionapp:teacherlogin")
+#     success_message = "Successfully registered"
+
+#     def form_valid(self, form):
+#         uname = form.cleaned_data['username']
+#         password = form.cleaned_data['password']
+#         email = form.cleaned_data['email']
+#         user = User.objects.create_user(uname, email, password)
+#         form.instance.user = user
+#         return super().form_valid(form)
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
             return redirect('/teacher/home/')
@@ -304,9 +331,62 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
 
 class StudentHomeView(StudentRequiredMixin, ListView):
     template_name = "clienttemplates/studenthome.html"
-    queryset = Teacher.objects.all().order_by("-id")
-    context_object_name = "teacherlist"
 
+    def get(self, request):
+        qs = Teacher.objects.all()
+        subject_query = request.GET.get('subject')
+        location_query = request.GET.get('location')
+        
+        if (subject_query != '' and location_query != '') and (subject_query is not None and location_query is not None):
+            qset = qs.filter(Q(subject__name__icontains=subject_query), Q(address__icontains=location_query)).distinct()
+            print(qset)
+            if not qset:
+                queryset = qs.order_by("-id")
+                messages.error(request, "No results found.")          
+                return render(request, "clienttemplates/studenthome.html", {
+                    'teacher_list' : queryset
+                })  
+            else:
+                return render(request, "clienttemplates/studenthome.html", {
+                    'teacher_list' : qset
+                })
+
+        elif subject_query != '' and subject_query is not None:
+            qset = qs.filter(subject__name__icontains=subject_query) 
+            if not qset:
+                queryset = qs.order_by("-id")  
+                messages.error(request, "No results found.")        
+                return render(request, "clienttemplates/studenthome.html", {
+                    'teacher_list' : queryset
+                })
+            else:
+                return render(request, "clienttemplates/studenthome.html", {
+                    'teacher_list' : qset
+                })
+
+        elif location_query != '' and location_query is not None:
+            qset = qs.filter(address__icontains=location_query)
+            if not qset:
+                queryset = qs.order_by("-id")
+                messages.error(request, "No results found.")          
+                return render(request, "clienttemplates/studenthome.html", {
+                    'teacher_list' : queryset
+                })  
+            else:
+                return render(request, "clienttemplates/studenthome.html", {
+                    'teacher_list' : qset
+                })
+
+        else:
+            qset = qs.order_by("-id")
+            paginator = Paginator(qset, 2)
+            page_number = request.GET.get('page', 1)
+            page = paginator.get_page(page_number)
+
+            if page.has_next():
+                next_url = f'?page={page.next_page_number()}'
+            else:
+                next_url = ''
 class TeacherProfileView(StudentRequiredMixin,DetailView):
     template_name = "clienttemplates/teacherprofile.html"
     model = Teacher
@@ -319,7 +399,13 @@ class TeacherProfileView(StudentRequiredMixin,DetailView):
 
     #     return context
 
+            if page.has_previous():
+                prev_url = f'?page={page.previous_page_number()}'
+            else:
+                prev_url = ''
 
+            return render(request, "clienttemplates/studenthome.html", { 'teacher_list' : page, 'next_page_url' : next_url, 'prev_page_url' : prev_url
+            })
 
 class TeacherHomeView(TeacherRequiredMixin, TemplateView):
     template_name = "clienttemplates/teacherhome.html"
@@ -329,6 +415,8 @@ class TeacherHomeView(TeacherRequiredMixin, TemplateView):
 class TeacherDetailView(TeacherRequiredMixin,DetailView):
     template_name = "clienttemplates/teacherdetail.html"
     model = Teacher
+    form_class = RatingForm
+    # context_object_name = "profile"
     context_object_name = "teacherdetail"
 
 class TeacherDeleteView(TeacherRequiredMixin,DeleteView):
@@ -351,6 +439,37 @@ class StudentDeleteView(StudentRequiredMixin,DeleteView):
     template_name = "clienttemplates/studentdelete.html"
     success_url = reverse_lazy("hometuitionapp:studentregister")
     model = Student
+
+    def post(self, request, **kwargs):
+        url = request.META.get('HTTP_REFERER') #GET last url
+        form = self.form_class(request.POST)
+        print(self.request)
+        if form.is_valid():
+            data = Rating() #create relation with model
+            data.rate = form.cleaned_data['rate']
+            teacher_id = self.kwargs["pk"]
+            data.teacher = Teacher.objects.get(id=teacher_id)
+            try:
+                print(self.request)
+                # data.user = User.objects.get(user=self.request.user)
+                current_user = request.user
+                print(current_user)
+                data.user = current_user.id
+                print(data.user)
+            except:
+                print("except")
+            # current_user = request.user
+            # print(current_user, '\n ++++++++++++++++++++++++')
+            # data.user_id = current_user.id
+            data.save()
+            messages.success(request,"Your review has been sent")
+            return HttpResponseRedirect(url)
+        else:
+            return render(self.request, url)
+
+    # if request.method == 'POST':
+    #     form = RateForm(request.POST, i)
+
 
 class StudentUpdateView(StudentRequiredMixin, UpdateView):
     template_name = "clienttemplates/studentupdate.html"
@@ -520,6 +639,71 @@ class AdminTeacherDetailView(AdminRequiredMixin, DetailView):
     model = Teacher
     context_object_name = "teacherdetail"
 
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     teacher_id = self.kwargs["pk"]
+    #     teacher = Teacher.objects.get(id=teacher_id)
+
+    #     return context
+
+
+class AdminAjaxTeacherSearchView(View):
+    def get(self, request, *args, **kwargs):
+        subject = self.request.GET.get("subject")
+        location = self.request.GET.get("location")
+        if subject != "" and location != "":
+            # teacherlist = Teacher.objects.all()
+            # listobj = teacherlist.filter(subject__a=subject)
+            teacherlist = Teacher.objects.filter(Q(subject__name__icontains=subject) |
+            Q(address__icontains=location)
+            )
+            # teacher = Teacher.objects.filter(subject=subject)
+            print("sdafdsf")
+            print(teacherlist)
+
+        elif subject != "" and location == "":
+            teacherlist = Teacher.objects.filter(Q(subject__name__icontains=subject))
+            print(subject)
+            print(teacherlist)
+        
+        elif location != "" and subject == "" :
+            teacherlist = Teacher.objects.filter(Q(address__icontains=location))
+            print(location)
+            print(teacherlist)
+        else:
+            teacherlist = Teacher.objects.all()
+
+
+        page = self.request.GET.get("page", 1)
+        paginator = Paginator(teacherlist, 1)
+        try:
+            results = paginator.page(page)
+        except PageNotAnInteger:
+            results = paginator.page(1)
+        except EmptyPage:
+            results = paginator.page(paginator.num_pages)
+        print(results, "\n page ++++++++++++++++++++++++++")
+
+
+
+        # page = self.request.GET.get('page', 1)
+        # paginator = Paginator(teacherlist, 1)
+
+        # results = paginator.get_page(1)
+
+
+        # try:
+        #     results = paginator.page(page)
+        # except PageNotAnInteger:
+        #     results = paginator.page(1)
+        # except EmptyPage:
+        #     results = paginator.page(paginator.num_pages)
+
+        return render(self.request, 'clienttemplates/ajaxteachersearch.html', {
+            'teacherlist': results, 'subject': subject, 'location': location
+        })
+
+        # return JsonResponse({"message": "success"})
 class AdminLogoutView(View):
     def get(self, request):
         logout(request)

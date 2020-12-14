@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
+from django.db.models import Avg, Count
 # # Create your models here.
 
 # # This model will not be used to create database table instead it is used as a base class for other models
@@ -70,14 +71,43 @@ class Teacher(TimeStamp):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
-    def save(self, *args, **kwargs):
-        grp, created = Group.objects.get_or_create(name="teacher")
-        self.user.groups.add(grp)
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     grp, created = Group.objects.get_or_create(name="teacher")
+    #     self.user.groups.add(grp)
+    #     super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
 
+# function for calculating the average rate of teacher
+    def averagerating(self):
+        ratings = Rating.objects.filter(teacher=self).aggregate(average=Avg("rate"))
+        avg=0
+        if ratings["average"] is not None:
+            avg = float(ratings["average"])
+        return avg
+
+#function for counting the total number of rating
+    def countrating(self):
+        ratings = Rating.objects.filter(teacher=self).aggregate(count=Count("id"))
+        cnt=0
+        if ratings["count"] is not None:
+            cnt = int(ratings["count"])
+        return cnt
+
+    class Meta:
+        ordering = ['id']
+
+
+class Rating(models.Model):
+    teacher = models.ForeignKey(Teacher,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True)
+    rate = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.rate
 
 class Student(TimeStamp):
     user = models.OneToOneField(

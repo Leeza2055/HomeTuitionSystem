@@ -102,6 +102,9 @@ urlpatterns = [
          AdminTeacherUpdateView.as_view(), name="adminteacherupdate"),
     path('system_admin/teacher/<int:pk>delete',
          AdminTeacherDeleteView.as_view(), name="adminteacherdelete"),
+
+     path('system_admin/ajax/search/', 
+     AdminAjaxTeacherSearchView.as_view(), name='adminajaxteachersearch'),
     path('adminlogout/', AdminLogoutView.as_view(), name="adminlogout"),
 
 ]
