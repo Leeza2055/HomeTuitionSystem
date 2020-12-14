@@ -71,10 +71,10 @@ class Teacher(TimeStamp):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
-    def save(self, *args, **kwargs):
-        grp, created = Group.objects.get_or_create(name="teacher")
-        self.user.groups.add(grp)
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     grp, created = Group.objects.get_or_create(name="teacher")
+    #     self.user.groups.add(grp)
+    #     super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -94,6 +94,9 @@ class Teacher(TimeStamp):
         if ratings["count"] is not None:
             cnt = int(ratings["count"])
         return cnt
+
+    class Meta:
+        ordering = ['id']
 
 
 class Rating(models.Model):

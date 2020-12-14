@@ -134,6 +134,28 @@ class TeacherRegisterForm(forms.ModelForm):
             raise forms.ValidationError("Password did not match")
         return c_pword
 
+
+# class TeacherRegisterNewForm(forms.ModelForm):
+#     # password = forms.CharField(widget=forms.PasswordInput(attrs={
+#     #     'class': 'form-control'
+#     # })), 
+#     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
+#         'class': 'form-control'
+#     }))
+#     username = forms.CharField(widget=forms.TextInput(attrs={
+#         'class': 'form-control'
+#     }))
+#     password = forms.CharField(widget=forms.TextInput(attrs={
+#         'class': 'form-control'
+#     }))
+
+#     class Meta:
+#         model = Teacher
+#         # fields = "__all__"
+#         fields = ['email', 'name', 'gender', 'photo', 
+#             'phone_no', 'address', 'education', 'experience', 'cv', 'citizenship', 'course', 'subject']
+
+
 class RatingForm(forms.ModelForm):
     class Meta:
         model = Rating
