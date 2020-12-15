@@ -387,9 +387,19 @@ class StudentHomeView(StudentRequiredMixin, ListView):
                 next_url = f'?page={page.next_page_number()}'
             else:
                 next_url = ''
+
+            if page.has_previous():
+                prev_url = f'?page={page.previous_page_number()}'
+            else:
+                prev_url = ''
+
+            return render(request, "clienttemplates/studenthome.html", { 'teacher_list' : page, 'next_page_url' : next_url, 'prev_page_url' : prev_url
+            })
+    
 class TeacherProfileView(StudentRequiredMixin,DetailView):
     template_name = "clienttemplates/teacherprofile.html"
     model = Teacher
+    form_class = RatingForm
     context_object_name = "profile"
 
     # def get_context_data(self, **kwargs):
@@ -399,13 +409,33 @@ class TeacherProfileView(StudentRequiredMixin,DetailView):
 
     #     return context
 
-            if page.has_previous():
-                prev_url = f'?page={page.previous_page_number()}'
-            else:
-                prev_url = ''
+    def post(self, request, **kwargs):
+        url = request.META.get('HTTP_REFERER') #GET last url
+        form = self.form_class(request.POST)
+        print(self.request)
+        if form.is_valid():
+            data = Rating() #create relation with model
+            data.rate = form.cleaned_data['rate']
+            teacher_id = self.kwargs["pk"]
+            data.teacher = Teacher.objects.get(id=teacher_id)
+            try:
+                print(self.request)
+                # data.user = User.objects.get(user=self.request.user)
+                current_user = request.user
+                print(current_user)
+                data.user = current_user.id
+                print(data.user)
+            except:
+                print("except")
+            # current_user = request.user
+            # print(current_user, '\n ++++++++++++++++++++++++')
+            # data.user_id = current_user.id
+            data.save()
+            messages.success(request,"Your review has been sent")
+            return HttpResponseRedirect(url)
+        else:
+            return render(self.request, url)
 
-            return render(request, "clienttemplates/studenthome.html", { 'teacher_list' : page, 'next_page_url' : next_url, 'prev_page_url' : prev_url
-            })
 
 class TeacherHomeView(TeacherRequiredMixin, TemplateView):
     template_name = "clienttemplates/teacherhome.html"
@@ -439,33 +469,6 @@ class StudentDeleteView(StudentRequiredMixin,DeleteView):
     template_name = "clienttemplates/studentdelete.html"
     success_url = reverse_lazy("hometuitionapp:studentregister")
     model = Student
-
-    def post(self, request, **kwargs):
-        url = request.META.get('HTTP_REFERER') #GET last url
-        form = self.form_class(request.POST)
-        print(self.request)
-        if form.is_valid():
-            data = Rating() #create relation with model
-            data.rate = form.cleaned_data['rate']
-            teacher_id = self.kwargs["pk"]
-            data.teacher = Teacher.objects.get(id=teacher_id)
-            try:
-                print(self.request)
-                # data.user = User.objects.get(user=self.request.user)
-                current_user = request.user
-                print(current_user)
-                data.user = current_user.id
-                print(data.user)
-            except:
-                print("except")
-            # current_user = request.user
-            # print(current_user, '\n ++++++++++++++++++++++++')
-            # data.user_id = current_user.id
-            data.save()
-            messages.success(request,"Your review has been sent")
-            return HttpResponseRedirect(url)
-        else:
-            return render(self.request, url)
 
     # if request.method == 'POST':
     #     form = RateForm(request.POST, i)

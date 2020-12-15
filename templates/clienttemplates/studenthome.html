@@ -1,21 +1,11 @@
 {% extends "clienttemplates/base.html" %}
 {% load static %}
 {% block content %}
-<<<<<<< HEAD
-<a href="{% url 'hometuitionapp:logout' %}">Logout</a>
-<h1 style="text-align: center;">Teacher List</h1>
-=======
 <h3>Welcome {{request.user}}</h3>
 <a href="{% url 'hometuitionapp:studentdetail' request.user.student.id %}">Profile</a>
 
 <a href="{% url 'hometuitionapp:logout' %}">Logout</a>
-
-{% for teacher in teacherlist %}
-	<img src="{{teacher.photo.url}}"/>
-	<h1><a href="{% url 'hometuitionapp:teacherprofile' teacher.pk %}">{{teacher.name}}</a></h1>
-	<h2>Education:{{teacher.education}}</h2>
-	<h2>Experience: {{teacher.experience}} </h2>
->>>>>>> a63400fc9eeed198353609f73dd2a9098c2b02a4
+<h1 style="text-align: center;">Teacher List</h1>
 
 <form method="GET" action="">
 	<div class="container form-row my-2" style="width: 70%; margin-left: auto; margin-right: auto;">
@@ -35,15 +25,6 @@
 	</div>
 </form>
 
-<!-- Displaying error message -->
-{% for message in messages %}
-  <div class="alert {{ message.tags }} alert-dismissible" role="alert" style="width: 70%; margin-left: auto; margin-right: auto;">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    {{ message }}
-  </div>
-{% endfor %}
 <div id="ajaxsearch">
 	<div class="row">
 		<div class="col-md-12">

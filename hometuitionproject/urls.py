@@ -19,7 +19,7 @@ from django.conf import settings
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin1/', admin.site.urls),
     path('', include("hometuitionapp.urls")),
 
 
