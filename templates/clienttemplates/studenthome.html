@@ -5,7 +5,7 @@
 <a href="{% url 'hometuitionapp:studentdetail' request.user.student.id %}">Profile</a>
 
 <a href="{% url 'hometuitionapp:logout' %}">Logout</a>
-<h1 style="text-align: center;">Teacher List</h1>
+<h1 style="text-align: center;"> <a href="{% url 'hometuitionapp:studenthome' %}">Teacher List</a></h1>
 
 <form method="GET" action="">
 	<div class="container form-row my-2" style="width: 70%; margin-left: auto; margin-right: auto;">
@@ -80,6 +80,7 @@
 	// search teacherlist using subject and location
 	$('#search_button').on('click', function(e){
 		e.preventDefault();
+		alert("clicked");
 		var subject = $('.subject_val').val();
 		var location = $('.location_val').val();
 		if(subject == "" && location == ""){

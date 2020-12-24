@@ -71,10 +71,10 @@ class Teacher(TimeStamp):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
-    # def save(self, *args, **kwargs):
-    #     grp, created = Group.objects.get_or_create(name="teacher")
-    #     self.user.groups.add(grp)
-    #     super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        grp, created = Group.objects.get_or_create(name="teacher")
+        self.user.groups.add(grp)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -106,8 +106,8 @@ class Rating(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.rate
+    def __int__(self):
+        return self.teacher
 
 class Student(TimeStamp):
     user = models.OneToOneField(

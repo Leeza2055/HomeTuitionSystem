@@ -213,6 +213,7 @@ class RatingForm(forms.ModelForm):
     class Meta:
         model = Rating
         fields = ['rate']
+        # fields = "__all__"
 
 
 class HomeTuitionSystemForm(forms.ModelForm):

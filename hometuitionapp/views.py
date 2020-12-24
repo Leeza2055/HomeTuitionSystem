@@ -126,6 +126,7 @@ class TeacherLoginView(FormView):
         pword = form.cleaned_data["password"]
         user = authenticate(username=uname, password=pword)
         if user is not None:
+            print(user)
             login(self.request, user)
 
         else:
@@ -150,7 +151,7 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
     template_name = "clienttemplates/teacherregister.html"
     form_class = TeacherRegisterForm
     success_url = reverse_lazy("hometuitionapp:teacherlogin")
-    success_message =  "%(username)s was Successfully registered" 
+    success_message =  "%(username)s was successfully registered!" 
 
     def form_valid(self, form):
         uname = form.cleaned_data['username']
@@ -163,6 +164,13 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
         # send_mail = 
         
         return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
+            return redirect('/teacher/home/')
+        else:
+            pass
+        return super().dispatch(request, *args, **kwargs)
 
 
 # class TeacherRegisterView(CreateView):
@@ -178,12 +186,6 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
 #         user = User.objects.create_user(uname, email, password)
 #         form.instance.user = user
 #         return super().form_valid(form)
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
-            return redirect('/teacher/home/')
-        else:
-            pass
-        return super().dispatch(request, *args, **kwargs)
 
     
 
@@ -412,26 +414,25 @@ class TeacherProfileView(StudentRequiredMixin,DetailView):
     def post(self, request, **kwargs):
         url = request.META.get('HTTP_REFERER') #GET last url
         form = self.form_class(request.POST)
-        print(self.request)
         if form.is_valid():
-            data = Rating() #create relation with model
-            data.rate = form.cleaned_data['rate']
+            user_rate = form.cleaned_data['rate']
             teacher_id = self.kwargs["pk"]
-            data.teacher = Teacher.objects.get(id=teacher_id)
-            try:
-                print(self.request)
-                # data.user = User.objects.get(user=self.request.user)
-                current_user = request.user
-                print(current_user)
-                data.user = current_user.id
-                print(data.user)
-            except:
-                print("except")
-            # current_user = request.user
-            # print(current_user, '\n ++++++++++++++++++++++++')
-            # data.user_id = current_user.id
-            data.save()
-            messages.success(request,"Your review has been sent")
+            rated_teacher = Teacher.objects.get(id=teacher_id)
+            current_user = request.user
+            student_user = User.objects.get(id=current_user.id)
+
+            obj, created = Rating.objects.update_or_create(
+                teacher= teacher_id, user =  current_user.id,
+                defaults = { 'rate': user_rate,
+                 'teacher' : rated_teacher,
+                 'user' : student_user
+                 },
+            )
+            print(obj)
+            if(created):
+                messages.success(request,"Your review has been sent")
+            else:
+                messages.success(request,"Your review has been updated")
             return HttpResponseRedirect(url)
         else:
             return render(self.request, url)
@@ -654,6 +655,8 @@ class AdminAjaxTeacherSearchView(View):
     def get(self, request, *args, **kwargs):
         subject = self.request.GET.get("subject")
         location = self.request.GET.get("location")
+        print(subject)
+        print(location)
         if subject != "" and location != "":
             # teacherlist = Teacher.objects.all()
             # listobj = teacherlist.filter(subject__a=subject)
@@ -662,14 +665,16 @@ class AdminAjaxTeacherSearchView(View):
             )
             # teacher = Teacher.objects.filter(subject=subject)
             print("sdafdsf")
-            print(teacherlist)
+            print(teacherlist, "\n list ++++++++++++++++++++++++++")
 
         elif subject != "" and location == "":
+            print(subject)
             teacherlist = Teacher.objects.filter(Q(subject__name__icontains=subject))
             print(subject)
             print(teacherlist)
         
         elif location != "" and subject == "" :
+            print(location)
             teacherlist = Teacher.objects.filter(Q(address__icontains=location))
             print(location)
             print(teacherlist)
@@ -702,11 +707,26 @@ class AdminAjaxTeacherSearchView(View):
         # except EmptyPage:
         #     results = paginator.page(paginator.num_pages)
 
-        return render(self.request, 'clienttemplates/ajaxteachersearch.html', {
-            'teacherlist': results, 'subject': subject, 'location': location
-        })
+        if subject != "" and location != "":
+            return render(self.request, 'clienttemplates/ajaxteachersearch.html', {
+                'teacherlist': results, 'subject': subject, 'location': location
+            })
+        elif subject != "" and location == "":
+            return render(self.request, 'clienttemplates/ajaxteachersearch.html', {
+                'teacherlist': results, 'subject': subject
+            })
+        elif location != "" and subject == "" :
+            return render(self.request, 'clienttemplates/ajaxteachersearch.html', {
+                'teacherlist': results, 'location': location
+            })
+        else:
+            return render(self.request, 'clienttemplates/ajaxteachersearch.html', {
+                'teacherlist': results
+            })
+        
 
         # return JsonResponse({"message": "success"})
+
 class AdminLogoutView(View):
     def get(self, request):
         logout(request)
