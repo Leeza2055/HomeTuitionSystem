@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap3',
     'hometuitionapp',
 ]
 
@@ -148,12 +147,12 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "leezashrestha999@gmail.com"
-EMAIL_HOST_PASSWORD = "@qwdfvb123"
+EMAIL_HOST_PASSWORD = "AspireInspire1"
 PASSWORD_RESET_TIMEOUT_DAYS = 2
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-# TEACHER_LOGIN_URL = '/teacherlogin/'
-# TEACHER_LOGIN_REDIRECT_URL = '/teacherhome/'
+TEACHER_LOGIN_URL = '/teacherlogin/'
+TEACHER_LOGIN_REDIRECT_URL = '/teacherhome/'
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',

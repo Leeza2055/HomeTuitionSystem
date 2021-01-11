@@ -64,7 +64,16 @@
                 <input type="radio" name="rate" value="5" class="my-btn" id="fifth"></input><label id="five" class="fas fa-star" for="fifth"></label>
 
                 <button type="submit">Submit</button>
+
             </form>
+            {% for message in messages %}
+              <div class="alert {{ message.tags }} alert-dismissible" role="alert" style="width: 70%; margin-left: auto; margin-right: auto;">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+              </div>
+            {% endfor %}
         </div>
     </div>
 </div>
