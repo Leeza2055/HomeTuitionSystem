@@ -91,11 +91,11 @@
 								
 							</div>
 							
-							<div class="col-sm-6 col-6 top-login-butt text-right mt-sm-2">
+							<!-- <div class="col-sm-6 col-6 top-login-butt text-right mt-sm-2">
 								<a href="{% url 'hometuitionapp:teacherregister' %}" class="button-head-mow3 text-white">Become Tutor</a>
 								<a href="{% url 'hometuitionapp:login' %}" class="button-head-mow3 text-white">Login</a>
 
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -114,7 +114,7 @@
 			<div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
 				<ul class="navbar-nav justify-content-center">
 					<li class="nav-item active">
-						<a class="nav-link text-white" href="{% url 'hometuitionapp:home' %}">Home
+						<a class="nav-link text-white" href="{% url 'hometuitionapp:teacherhome' %}">Home
 							<span class="sr-only">(current)</span>
 						</a>
 					</li>
@@ -157,6 +157,20 @@
 					</li>
 					<li class="nav-item">
 						<a class="nav-link text-white" href="{% url 'hometuitionapp:contactus' %}">Contact Us</a>
+					</li>
+				</ul>
+                <ul class="navbar-nav justify-content-center navbar-right" style=" margin: revert;"> 
+                    <li class="nav-item">
+						<p class="text-white mr-2">Welcome {{request.user}}</p> 
+					</li>
+					<li class="nav-item dropdown">
+						<a class="dropdown-toggle" style=" color: black;" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fas fa-2x fa-user"></i>
+						</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="{% url 'hometuitionapp:teacherdetail' request.user.teacher.id %}">Profile</a>
+							<a class="dropdown-item" href="{% url 'hometuitionapp:logout' %}">Logout</a>
+						</div>
 					</li>
 				</ul>
 			</div>
@@ -273,7 +287,6 @@
 
 
 	<!-- Js files -->
-	<script src="{% static 'clientstatic/js/app.js' %}"></script>
 	<!-- JavaScript -->
 	<script src="{% static 'clientstatic/js/jquery-2.2.3.min.js' %}"></script>
 	<!-- Default-JavaScript-File -->

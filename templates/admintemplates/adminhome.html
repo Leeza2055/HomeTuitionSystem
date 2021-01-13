@@ -7,38 +7,44 @@
                     <div class="outer-w3-agile col-xl">
                         <div class="stat-grid p-3 d-flex align-items-center justify-content-between bg-primary">
                             <div class="s-l">
-                                <h5>Projects</h5>
-                                <p class="paragraph-agileits-w3layouts text-white">Lorem Ipsum</p>
+                                <a href="{% url 'hometuitionapp:adminteacherlist' %}">
+                                    <h5>Teacher</h5>
+                                    <p class="paragraph-agileits-w3layouts text-white">Total Teachers</p>
+                                </a>
                             </div>
                             <div class="s-r">
-                                <h6>340
-                                    <i class="far fa-edit"></i>
+                                <h6>{{ teacher_list }}
+                                    <!-- <i class="far fa-edit"></i> -->
                                 </h6>
                             </div>
                         </div>
                         <div class="stat-grid p-3 mt-3 d-flex align-items-center justify-content-between bg-success">
                             <div class="s-l">
-                                <h5>Clients</h5>
-                                <p class="paragraph-agileits-w3layouts">Lorem Ipsum</p>
+                                <a href=" {% url 'hometuitionapp:adminstudentlist' %} ">
+                                    <h5>Students</h5>
+                                    <p class="paragraph-agileits-w3layouts">Total Students</p>
+                                </a>
                             </div>
                             <div class="s-r">
-                                <h6>250
-                                    <i class="far fa-smile"></i>
+                                <h6>{{ student_list }}
+                                    <!-- <i class="far fa-smile"></i> -->
                                 </h6>
                             </div>
                         </div>
                         <div class="stat-grid p-3 mt-3 d-flex align-items-center justify-content-between bg-danger">
                             <div class="s-l">
-                                <h5>Tasks</h5>
-                                <p class="paragraph-agileits-w3layouts">Lorem Ipsum</p>
+                                <a href="{% url 'hometuitionapp:admincourselist' %}">
+                                    <h5>Course</h5>
+                                    <p class="paragraph-agileits-w3layouts">Total Courses</p>
+                                </a>
                             </div>
                             <div class="s-r">
-                                <h6>232
-                                    <i class="fas fa-tasks"></i>
+                                <h6>{{ course_list }}
+                                    <!-- <i class="fas fa-tasks"></i> -->
                                 </h6>
                             </div>
                         </div>
-                        <div class="stat-grid p-3 mt-3 d-flex align-items-center justify-content-between bg-warning">
+                        <!-- <div class="stat-grid p-3 mt-3 d-flex align-items-center justify-content-between bg-warning">
                             <div class="s-l">
                                 <h5>Employees</h5>
                                 <p class="paragraph-agileits-w3layouts">Lorem Ipsum</p>
@@ -48,44 +54,44 @@
                                     <i class="fas fa-users"></i>
                                 </h6>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <!--// Stats -->
                     <!-- Pie-chart -->
-                    <div class="outer-w3-agile col-xl ml-xl-3 mt-xl-0 mt-3">
+                    <!-- <div class="outer-w3-agile col-xl ml-xl-3 mt-xl-0 mt-3">
                         <h4 class="tittle-w3-agileits mb-4">Pie Chart</h4>
                         <div id="chartdiv"></div>
-                    </div>
+                    </div> -->
                     <!--// Pie-chart -->
                 </div>
             </div>
             <!-- Simple-chart -->
-            <div class="outer-w3-agile mt-3">
+            <!-- <div class="outer-w3-agile mt-3">
                 <h4 class="tittle-w3-agileits mb-4">Graph</h4>
                 <div id="Hybridgraph" class="simple-chart1">
                 </div>
-            </div>
+            </div> -->
             <!--// Simple-chart -->
 
             <!--// Bar-Chart -->
-            <div class="outer-w3-agile mt-3">
+            <!-- <div class="outer-w3-agile mt-3">
                 <h4 class="tittle-w3-agileits mb-4">Bar Chart</h4>
                 <div id="chart-1"></div>
-            </div>
+            </div> -->
             <!--// Bar-Chart -->
 
             <!--// three-grids -->
-            <div class="container-fluid">
-                <div class="row">
+            <!-- <div class="container-fluid">
+                <div class="row"> -->
                     <!-- Calender -->
-                    <div class="outer-w3-agile col-xl mt-3">
+                    <!-- <div class="outer-w3-agile col-xl mt-3">
                         <h4 class="tittle-w3-agileits mb-4">Multi range Calender</h4>
                         <div class="multi-select-calender"></div>
                         <div class="box"></div>
-                    </div>
+                    </div> -->
                     <!--// Calender -->
                     <!-- Profile -->
-                    <div class="outer-w3-agile col-xl mt-3 mx-xl-3 p-xl-0 px-md-5">
+                    <!-- <div class="outer-w3-agile col-xl mt-3 mx-xl-3 p-xl-0 px-md-5">
                         <div class="header">
                             <div class="text">
                                 <img src="{% static 'adminstatic/images/profile.jpg' %}" class="img-fluid rounded-circle" alt="Responsive image">
@@ -169,10 +175,10 @@
                                 </ul>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
                     <!--// Profile -->
                     <!-- Browser stats -->
-                    <div class="outer-w3-agile col-xl mt-3">
+                    <!-- <div class="outer-w3-agile col-xl mt-3">
                         <h4 class="tittle-w3-agileits mb-4">Browser Stats</h4>
                         <div class="stats-info stats-body">
                             <ul class="list-unstyled">
@@ -214,15 +220,15 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                    </div> -->
                     <!--// Browser stats -->
-                </div>
-            </div>
+                <!-- </div>
+            </div> -->
             <!--// Three-grids -->
             <!-- Countdown -->
-            <div class="outer-w3-agile mt-3 outer-w3-agile-bg">
+            <!-- <div class="outer-w3-agile mt-3 outer-w3-agile-bg">
                 <h4 class="tittle-w3-agileits mb-4 text-white">Countdown Timer</h4>
                 <div class="simply-countdown-custom" id="simply-countdown-custom"></div>
-            </div>
+            </div> -->
             <!--// Countdown -->
 {% endblock %}

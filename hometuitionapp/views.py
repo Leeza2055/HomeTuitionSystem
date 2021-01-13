@@ -380,8 +380,8 @@ class StudentHomeView(StudentRequiredMixin, ListView):
                 })
 
         else:
-            qset = qs.order_by("-id")
-            paginator = Paginator(qset, 2)
+            qset = qs.order_by("-id") 
+            paginator = Paginator(qset, 8)
             page_number = request.GET.get('page', 1)
             page = paginator.get_page(page_number)
 
@@ -410,7 +410,8 @@ class TeacherProfileView(StudentRequiredMixin,DetailView):
     #     teacher = Teacher.objects.get(id=teacher_id)
 
     #     return context
-
+    
+    # Rating teachers
     def post(self, request, **kwargs):
         url = request.META.get('HTTP_REFERER') #GET last url
         form = self.form_class(request.POST)
@@ -424,9 +425,9 @@ class TeacherProfileView(StudentRequiredMixin,DetailView):
             obj, created = Rating.objects.update_or_create(
                 teacher= teacher_id, user =  current_user.id,
                 defaults = { 'rate': user_rate,
-                 'teacher' : rated_teacher,
-                 'user' : student_user
-                 },
+                'teacher' : rated_teacher,
+                'user' : student_user
+                },
             )
             print(obj)
             if(created):
@@ -446,14 +447,13 @@ class TeacherHomeView(TeacherRequiredMixin, TemplateView):
 class TeacherDetailView(TeacherRequiredMixin,DetailView):
     template_name = "clienttemplates/teacherdetail.html"
     model = Teacher
-    form_class = RatingForm
-    # context_object_name = "profile"
     context_object_name = "teacherdetail"
 
 class TeacherDeleteView(TeacherRequiredMixin,DeleteView):
     template_name = "clienttemplates/teacherdelete.html"
     success_url = reverse_lazy("hometuitionapp:teacherregister")
     model = Teacher
+    context_object_name = "teacherdetail"
 
 class TeacherUpdateView(TeacherRequiredMixin, UpdateView):
     template_name = "clienttemplates/teacherupdate.html"
@@ -470,6 +470,7 @@ class StudentDeleteView(StudentRequiredMixin,DeleteView):
     template_name = "clienttemplates/studentdelete.html"
     success_url = reverse_lazy("hometuitionapp:studentregister")
     model = Student
+    context_object_name = "studentdetail"
 
     # if request.method == 'POST':
     #     form = RateForm(request.POST, i)
@@ -509,6 +510,14 @@ class AdminRequiredMixin(object):
 
 class AdminHomeView(AdminRequiredMixin, TemplateView):
     template_name = "admintemplates/adminhome.html"
+
+    # to send multiple context in single view
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['teacher_list'] = Teacher.objects.count()
+        data['student_list'] = Student.objects.count()
+        data['course_list'] = Course.objects.count()
+        return data
 
 
 class AdminLoginView(FormView):

@@ -54,7 +54,7 @@ urlpatterns = [
     path('student/<int:pk>/update/',
          StudentUpdateView.as_view(), name="studentupdate"),
     path('student/<int:pk>/delete/',
-         TeacherDeleteView.as_view(), name="studentdelete"),
+         StudentDeleteView.as_view(), name="studentdelete"),
     # path("search/", SearchView.as_view(), name="search"),
     path('logout/', LogoutView.as_view(), name="logout"),
 
