@@ -22,30 +22,10 @@ urlpatterns = [
          views.ConfirmRegistrationView.as_view(), name='confirm_email'),
     path('confirm-email1/<str:user_id>/<str:token>/',
          views.ConfirmRegistration1View.as_view(), name='confirm_email1'),
-    # path('teacher/register/', views.TeacherRegisterView.as_view(), name='teacherregister'),
-    # path('activate/<uid>/<token>/', ActivateAccount.as_view(), name='activate'),
-    # url(r'^teacher/register/$', views.teacherregister, name='teacherregister'),
-    # url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-    #     views.activate, name='activate'),
     path('teacher/home/', TeacherHomeView.as_view(), name="teacherhome"),
     path('student/home/', StudentHomeView.as_view(), name="studenthome"),
     path('password_reset',views.password_reset_request, name="password_reset"),
     path('password_resett',views.password_reset_requestt, name="password_resett"),
-    # path('reset-password/', auth_views.PasswordResetView.as_view(
-    #      template_name='clienttemplates/reset_password.html',
-    #      html_email_template_name='clienttemplates/reset_password_email.html',
-    #      success_url=settings.TEACHER_LOGIN_URL,
-    #      token_generator=user_tokenizer),
-    #      name='reset_password'),
-    # path('reset-password-confirmation/<str:uidb64>/<str:token>/',
-    #      auth_views.PasswordResetConfirmView.as_view(
-    #          template_name='clienttmplates/reset_password_update.html',
-    #          post_reset_login=True,
-    #          post_reset_login_backend='django.contrib.auth.backends.ModelBackend',
-    #          token_generator=user_tokenizer,
-    #          success_url=settings.TEACHER_LOGIN_REDIRECT_URL),
-    #         name='password_reset_confirm'),
-
     path('teacher/<int:pk>/profile/',
          TeacherProfileView.as_view(), name="teacherprofile"),
     path('teacher/<int:pk>/detail/',
@@ -60,7 +40,6 @@ urlpatterns = [
          StudentUpdateView.as_view(), name="studentupdate"),
     path('student/<int:pk>/delete/',
          TeacherDeleteView.as_view(), name="studentdelete"),
-    # path("search/", SearchView.as_view(), name="search"),
     path('logout/', LogoutView.as_view(), name="logout"),
 
 

@@ -25,7 +25,6 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
-# from .tokens import account_activation_token
 
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -99,13 +98,6 @@ class StudentRegisterView(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy("hometuitionapp:studentlogin")
     success_message ="A confirmation email has been sent to %(email)s. Please confirm to finish registering."  
 
-    # def form_valid(self, form):
-    #     uname = form.cleaned_data['username']
-    #     password = form.cleaned_data['password']
-    #     email = form.cleaned_data['email']
-    #     user = User.objects.create_user(uname, email, password)
-    #     form.instance.user = user
-    #     return super().form_valid(form)
     def form_valid(self, form):
         uname = form.cleaned_data['username']
         password = form.cleaned_data['password']
@@ -146,13 +138,6 @@ class ConfirmRegistration1View(View):
         user = User.objects.get(pk=user_id)
         print(user)
 
-
-
-        # context = {
-        #     'form': TeacherLoginForm(),
-        #     'message': 'Registration confirmation error. Please click the reset password to generate a new confirmation email.'
-        # }
-
         if user is not None and user_tokenizer.check_token(user, token):
             user.is_active = True
             user.save()
@@ -183,7 +168,7 @@ def password_reset_requestt(request):
                     }
                     email = render_to_string(email_template_name, c)
                     try:
-                        send_mail(subject, email, 'leezashrestha999@gmail.com' , [user.email], fail_silently=False)
+                        send_mail(subject, email, 'tuitionsystem07@gmail.com' , [user.email], fail_silently=False)
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     messages.success(request, 'A message with reset password instructions has been sent to your inbox.')
@@ -215,15 +200,14 @@ class TeacherLoginView(FormView):
                         })
         return super().form_valid(form)
 
-    # def dispatch(self, request, *args, **kwargs):
-    #     if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
-    #         return redirect('/teacher/home/')
-    #     else:
-    #         pass
-    #     return super().dispatch(request, *args, **kwargs)
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
+            return redirect('/teacher/home/')
+        else:
+            pass
+        return super().dispatch(request, *args, **kwargs)
 
-    # def get_success_url(self):
-    #     return reverse_lazy('teacherprofile', kwargs={"pk": self.object.pk})
+    
 
 
 class TeacherRegisterView(SuccessMessageMixin, CreateView):
@@ -258,92 +242,12 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
         return super().form_valid(form)
         
 
-                
-
-        
-
-
-
-        # user = User.objects.create_user(uname, email, password)
-        # form.instance.user = user
-
-        # LoginToken.object.create(user=user, token_value="Token"+user.id)
-        # send_mail = 
-        
-        # 
-    
-    
-
-
-
-
-
-# class TeacherRegisterView(CreateView):
-#     template_name = "clienttemplates/teacherregister.html"
-#     form_class = TeacherRegisterForm
-#     success_url = reverse_lazy("hometuitionapp:teacherlogin")
-#     success_message = "Successfully registered"
-
-#     def form_valid(self, form):
-#         uname = form.cleaned_data['username']
-#         password = form.cleaned_data['password']
-#         email = form.cleaned_data['email']
-#         user = User.objects.create_user(uname, email, password)
-#         form.instance.user = user
-#         return super().form_valid(form)
-    # def dispatch(self, request, *args, **kwargs):
-    #     if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
-    #         return redirect('/teacher/home/')
-    #     else:
-    #         pass
-    #     return super().dispatch(request, *args, **kwargs)
-# class TeacherRegisterView(View):
-#     def get(self, request):
-#         return render(request, 'clienttemplates/teacherregister.html', {'form': TeacherRegisterForm()})
-
-#     def post(self, request):
-#         form = TeacherRegisterForm(request.POST)
-#         if form.is_valid():
-#             uname = form.cleaned_data['username']
-#             password = form.cleaned_data['password']
-#             email = form.cleaned_data['email']
-#             user = User.objects.create_user(uname, email, password)
-#             user = form.save(commit=False)
-#             user.is_active = False
-#             user.save()
-#             token = user_tokenizer.make_token(user)
-#             user_id = urlsafe_base64_encode(force_bytes(user.id))
-#             url = 'http://localhost:8000' + reverse('confirm_email',
-#                                                     kwargs={'user_id': user_id, 'token': token})
-#             message = get_template('clienttemplates/register_email.html').render({
-#                 'confirm_url': url
-#             })
-#             mail = EmailMessage('Email Confirmation', message, to=[
-#                                 user.email], from_email=settings.EMAIL_HOST_USER)
-#             mail.content_subtype = 'html'
-#             mail.send()
-
-#             return render(request, 'clienttemplates/teacherlogin.html',
-#                           {
-#                               'form': TeacherLoginForm(),
-#                               'message': f'A confirmation email has been sent to {user.email}. Please confirm to finish registering'
-#                           })
-#         return render(request, 'clienttemplates/teacherregister.html', {'form': form})
-
 class ConfirmRegistrationView(View):
     def get(self, request, user_id, token):
         user_id = force_text(urlsafe_base64_decode(user_id))
         print(user_id)
         user = User.objects.get(pk=user_id)
         print(user)
-
-
-
-        # context = {
-        #     'form': TeacherLoginForm(),
-        #     'message': 'Registration confirmation error. Please click the reset password to generate a new confirmation email.'
-        # }
-
         if user is not None and user_tokenizer.check_token(user, token):
             user.is_active = True
             user.save()
@@ -352,8 +256,7 @@ class ConfirmRegistrationView(View):
         else:
             messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
             return redirect('hometuitionapp:teacherlogin')
-        #     context['message'] = "Registration complete. Please login"
-        # return render(request, 'clienttemplates/teacherlogin.html', context)    
+          
 
 def password_reset_request(request):
     if request.method == "POST":
@@ -376,7 +279,7 @@ def password_reset_request(request):
                     }
                     email = render_to_string(email_template_name, c)
                     try:
-                        send_mail(subject, email, 'leezashrestha999@gmail.com' , [user.email], fail_silently=False)
+                        send_mail(subject, email, 'tuitionsystem07@gmail.com' , [user.email], fail_silently=False)
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     messages.success(request, 'A message with reset password instructions has been sent to your inbox.')
@@ -385,99 +288,6 @@ def password_reset_request(request):
     password_reset_form = PasswordResetForm()
     return render(request=request, template_name="clienttemplates/password_reset.html", context={"password_reset_form":password_reset_form})
 
-
-
-
-
-# def teacherregister(request):
-#     if request.method == 'POST':
-#         form = TeacherRegisterForm(request.POST)
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             user.is_active = False
-#             user.save()
-#             current_site = get_current_site(request)
-#             mail_subject = 'Activate your account.'
-#             message = render_to_string('clienttemplates/acc_active_email.html', {
-#                 'user': user,
-#                 'domain': current_site.domain,
-#                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-#                 'token': account_activation_token.make_token(user),
-#             })
-#             to_email = form.cleaned_data.get('email')
-#             email = EmailMessage(mail_subject, message, to=[to_email])
-#             email.send()
-#             return HttpResponse('Please confirm your email address to complete the registration')
-#     else:
-#         form = TeacherRegisterForm()
-#     return render(request, 'clienttemplates/teacherregister.html', {'form': form})
-
-
-# def activate(request, uid64, token):
-#     try:
-#         uid = force_text(urlsafe_base64_decode(uidb64))
-#         user = User.objects.get(pk=uid)
-#     except(TypeError, ValueError, OverflowError,User.DoesNotExist):
-#         user = None
-#     if user is not None and account_activation_token.check_token(user, token):
-#         user.is_active = True
-#         user.save()
-#         # login(request, user)
-
-#         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
-#     else:
-#         return HttpResponse('Activation link is invalid!')
-# class TeacherRegisterView(View):
-#     form_class = TeacherRegisterForm
-#     template_name = 'clienttemplates/teacherregister.html'
-
-#     def get(self, request, *args, **kwargs):
-#         form = self.form_class()
-#         return render(request, self.template_name, {'form': form})
-
-#     def post(self, request, *args, **kwargs):
-#         form = self.form_class(request.POST)
-#         if form.is_valid():
-
-#             user = form.save(commit=False)
-#             user.is_active = False # Deactivate account till it is confirmed
-#             user.save()
-
-#             current_site = get_current_site(request)
-#             subject = 'Activate Your Account'
-#             message = render_to_string('clienttemplates/acc_active_email.html', {
-#                 'user': user,
-#                 'domain': current_site.domain,
-#                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-#                 'token': account_activation_token.make_token(user),
-#             })
-#             user.email_user(subject, message)
-
-#             messages.success(request, ('Please Confirm your email to complete registration.'))
-
-#             return redirect('teacher/login/')
-
-#         return render(request, self.template_name, {'form': form})
-
-# class ActivateAccount(View):
-
-#     def get(self, request, uidb64, token, *args, **kwargs):
-#         try:
-#             uid = force_text(urlsafe_base64_decode(uidb64))
-#             user = User.objects.get(pk=uid)
-#         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-#             user = None
-
-#         if user is not None and account_activation_token.check_token(user, token):
-#             user.is_active = True
-#             # user.profile.email_confirmed = True
-#             user.save()
-#             # login(request, user)
-#             messages.success(request, ('Your account have been confirmed.'))
-#             return redirect('teacher/login/')
-#         else:
-#             messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
-#             return redirect('teacher/register/')
 
 
 class StudentHomeView(StudentRequiredMixin, ListView):
