@@ -355,14 +355,13 @@ class StudentHomeView(StudentRequiredMixin, ListView):
 
         return render(request, "clienttemplates/studenthome.html", { 'teacher_list' : page, 'next_page_url' : next_url, 'prev_page_url' : prev_url
         })
-
-
+      
 class TeacherProfileView(StudentRequiredMixin,DetailView):
     template_name = "clienttemplates/teacherprofile.html"
     model = Teacher
     form_class = RatingForm
     context_object_name = "profile"
-
+    
     def post(self, request, **kwargs):
         url = request.META.get('HTTP_REFERER') #GET last url
         form = self.form_class(request.POST)
@@ -423,29 +422,11 @@ class StudentDeleteView(StudentRequiredMixin,DeleteView):
     success_url = reverse_lazy("hometuitionapp:studentregister")
     model = Student
 
-    
-
-    # if request.method == 'POST':
-    #     form = RateForm(request.POST, i)
-
-
 class StudentUpdateView(StudentRequiredMixin, UpdateView):
     template_name = "clienttemplates/studentupdate.html"
     form_class = StudentUpdateForm
     success_url = reverse_lazy("hometuitionapp:studenthome")
     model = Student
-
-# class SearchView(TemplateView):
-#     template_name = "clienttemplates/searchresult.html"
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         keyword = self.request.GET["query"]
-#         print(keyword, "+++++++++++")
-#         teachers = Teacher.object.filter(Q(address__icontains=keyword)
-#                                          | Q(subject__icontains=keyword))
-#         context["searched_teachers"] = teachers
-#         return context
 
 
 class LogoutView(View):
@@ -591,19 +572,10 @@ class AdminTeacherDeleteView(DeleteView):
     success_url = reverse_lazy("hometuitionapp:adminteacherlist")
     model = Teacher
 
-
 class AdminTeacherDetailView(AdminRequiredMixin, DetailView):
     template_name = "admintemplates/adminteacherdetail.html"
     model = Teacher
     context_object_name = "teacherdetail"
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     teacher_id = self.kwargs["pk"]
-    #     teacher = Teacher.objects.get(id=teacher_id)
-
-    #     return context
-
 
 class AdminAjaxTeacherSearchView(View):
     def get(self, request, *args, **kwargs):
@@ -662,6 +634,7 @@ class AdminAjaxTeacherSearchView(View):
         })
 
         # return JsonResponse({"message": "success"})
+        
 class AdminLogoutView(View):
     def get(self, request):
         logout(request)
