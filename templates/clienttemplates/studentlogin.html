@@ -19,6 +19,7 @@
 	{{error}}<br>
 	<div class="flex-group">	
 	<button type="submit" class="btn btn-primary">Login</button>
+	<p><a href="{% url 'hometuitionapp:password_resett' %}">Forgot password? </a></p>
 	<hr>
 	<p>Not Registered Yet!<a href="{%  url 'hometuitionapp:studentregister' %}">Register here</a></p>
 	{% if messages %}
