@@ -6,13 +6,18 @@ from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
+from django.template.loader import get_template
 from django.conf import settings
+from django.urls import reverse
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.mail import EmailMessage
+from django.core.mail import send_mail, BadHeaderError
 from django.core.paginator import Paginator
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
+from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .forms import *
 from django.views import View
@@ -20,12 +25,9 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
-# from .tokens import account_activation_token
 
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-
 from .tokens import user_tokenizer
 
 
@@ -94,15 +96,33 @@ class StudentRegisterView(SuccessMessageMixin, CreateView):
     template_name = "clienttemplates/studentregister.html"
     form_class = StudentRegisterForm
     success_url = reverse_lazy("hometuitionapp:studentlogin")
-    success_message = "%(username)s was Successfully registered" 
+    success_message ="A confirmation email has been sent to %(email)s. Please confirm to finish registering."  
 
     def form_valid(self, form):
         uname = form.cleaned_data['username']
         password = form.cleaned_data['password']
         email = form.cleaned_data['email']
-        user = User.objects.create_user(uname, email, password)
-        form.instance.user = user
+        user1 = User.objects.create_user(username=uname,email=email,password=password,is_active=False)
+        user = form.save(commit=False)
+        form.instance.user = user1
+
+        user.is_active = False
+        user.save()
+        # test_data = User.objects.get(id=user1.id).id
+        # print("sjdbfisdjfsdkjfk",test_data)
+        token = user_tokenizer.make_token(user1)
+        print(user1.id)
+        print("+++++++++++++++++++++",user)
+        user_id = urlsafe_base64_encode(force_bytes(user1.id))
+        url = 'http://localhost:8000' + reverse('hometuitionapp:confirm_email1', kwargs={'user_id': user_id, 'token': token})
+        message = get_template('clienttemplates/register_email.html').render({
+            'confirm_url': url
+        })
+        mail = EmailMessage('Email Confirmation', message, to=[user.email], from_email=settings.EMAIL_HOST_USER)
+        mail.content_subtype = 'html'
+        mail.send()
         return super().form_valid(form)
+        
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user.groups.filter(name="student").exists():
@@ -111,6 +131,51 @@ class StudentRegisterView(SuccessMessageMixin, CreateView):
             pass
         return super().dispatch(request, *args, **kwargs)
 
+class ConfirmRegistration1View(View):
+    def get(self, request, user_id, token):
+        user_id = force_text(urlsafe_base64_decode(user_id))
+        print(user_id)
+        user = User.objects.get(pk=user_id)
+        print(user)
+
+        if user is not None and user_tokenizer.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.success(request,('Your account have been confirmed.'))
+            return redirect('hometuitionapp:studentlogin')
+        else:
+            messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
+            return redirect('hometuitionapp:studentlogin')
+
+def password_reset_requestt(request):
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "clienttemplates/password_reset_email.html"
+                    c = {
+                    "email":user.email,
+                    'domain':'127.0.0.1:8000',
+                    'site_name': 'Website',
+                    "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                    "user": user,
+                    'token': default_token_generator.make_token(user),
+                    'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, 'tuitionsystem07@gmail.com' , [user.email], fail_silently=False)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    messages.success(request, 'A message with reset password instructions has been sent to your inbox.')
+                    return redirect ("hometuitionapp:studentlogin")
+            messages.error(request, 'An invalid email has been entered.')
+    password_reset_form = PasswordResetForm()
+    return render(request=request, template_name="clienttemplates/password_reset.html", context={"password_reset_form":password_reset_form})
     
 
 
@@ -143,27 +208,40 @@ class TeacherLoginView(FormView):
             pass
         return super().dispatch(request, *args, **kwargs)
 
-    # def get_success_url(self):
-    #     return reverse_lazy('teacherprofile', kwargs={"pk": self.object.pk})
+    
 
 
 class TeacherRegisterView(SuccessMessageMixin, CreateView):
     template_name = "clienttemplates/teacherregister.html"
     form_class = TeacherRegisterForm
     success_url = reverse_lazy("hometuitionapp:teacherlogin")
-    success_message =  "%(username)s was successfully registered!" 
+    success_message =  "A confirmation email has been sent to %(email)s. Please confirm to finish registering." 
 
     def form_valid(self, form):
         uname = form.cleaned_data['username']
         password = form.cleaned_data['password']
         email = form.cleaned_data['email']
-        user = User.objects.create_user(uname, email, password)
-        form.instance.user = user
+        user1 = User.objects.create_user(username=uname,email=email,password=password,is_active=False)
+        user = form.save(commit=False)
+        form.instance.user = user1
 
-        # LoginToken.object.create(user=user, token_value="Token"+user.id)
-        # send_mail = 
-        
+        user.is_active = False
+        user.save()
+        # test_data = User.objects.get(id=user1.id).id
+        # print("sjdbfisdjfsdkjfk",test_data)
+        token = user_tokenizer.make_token(user1)
+        print(user1.id)
+        print("+++++++++++++++++++++",user)
+        user_id = urlsafe_base64_encode(force_bytes(user1.id))
+        url = 'http://localhost:8000' + reverse('hometuitionapp:confirm_email', kwargs={'user_id': user_id, 'token': token})
+        message = get_template('clienttemplates/register_email.html').render({
+            'confirm_url': url
+        })
+        mail = EmailMessage('Email Confirmation', message, to=[user.email], from_email=settings.EMAIL_HOST_USER)
+        mail.content_subtype = 'html'
+        mail.send()
         return super().form_valid(form)
+        
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
@@ -172,163 +250,53 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
             pass
         return super().dispatch(request, *args, **kwargs)
 
-
-# class TeacherRegisterView(CreateView):
-#     template_name = "clienttemplates/teacherregister.html"
-#     form_class = TeacherRegisterForm
-#     success_url = reverse_lazy("hometuitionapp:teacherlogin")
-#     success_message = "Successfully registered"
-
-#     def form_valid(self, form):
-#         uname = form.cleaned_data['username']
-#         password = form.cleaned_data['password']
-#         email = form.cleaned_data['email']
-#         user = User.objects.create_user(uname, email, password)
-#         form.instance.user = user
-#         return super().form_valid(form)
-
     
+class ConfirmRegistrationView(View):
+    def get(self, request, user_id, token):
+        user_id = force_text(urlsafe_base64_decode(user_id))
+        print(user_id)
+        user = User.objects.get(pk=user_id)
+        print(user)
+        if user is not None and user_tokenizer.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.success(request,('Your account have been confirmed.'))
+            return redirect('hometuitionapp:teacherlogin')
+        else:
+            messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
+            return redirect('hometuitionapp:teacherlogin')
+          
 
-# class TeacherRegisterView(View):
-#     def get(self, request):
-#         return render(request, 'clienttemplates/teacherregister.html', {'form': TeacherRegisterForm()})
+def password_reset_request(request):
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "clienttemplates/password_reset_email.html"
+                    c = {
+                    "email":user.email,
+                    'domain':'127.0.0.1:8000',
+                    'site_name': 'Website',
+                    "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                    "user": user,
+                    'token': default_token_generator.make_token(user),
+                    'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, 'tuitionsystem07@gmail.com' , [user.email], fail_silently=False)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    messages.success(request, 'A message with reset password instructions has been sent to your inbox.')
+                    return redirect ("hometuitionapp:teacherlogin")
+            messages.error(request, 'An invalid email has been entered.')
+    password_reset_form = PasswordResetForm()
+    return render(request=request, template_name="clienttemplates/password_reset.html", context={"password_reset_form":password_reset_form})
 
-#     def post(self, request):
-#         form = TeacherRegisterForm(request.POST)
-#         if form.is_valid():
-#             uname = form.cleaned_data['username']
-#             password = form.cleaned_data['password']
-#             email = form.cleaned_data['email']
-#             user = User.objects.create_user(uname, email, password)
-#             user = form.save(commit=False)
-#             user.is_valid = False
-#             user.save()
-#             token = user_tokenizer.make_token(user)
-#             user_id = urlsafe_base64_encode(force_bytes(user.id))
-#             url = 'http://localhost:8000' + reverse('confirm_email',
-#                                                     kwargs={'user_id': user_id, 'token': token})
-#             message = get_template('clienttemplates/register_email.html').render({
-#                 'confirm_url': url
-#             })
-#             mail = EmailMessage('Email Confirmation', message, to=[
-#                                 user.email], from_email=settings.EMAIL_HOST_USER)
-#             mail.content_subtype = 'html'
-#             mail.send()
-
-#             return render(request, 'clienttemplates/teacherlogin.html',
-#                           {
-#                               'form': TeacherLoginForm(),
-#                               'message': f'A confirmation email has been sent to {user.email}. Please confirm to finish registering'
-#                           })
-#         return render(request, 'clienttemplates/teacherregister.html', {'form': form})
-
-
-# class ConfirmRegistrationView(View):
-#     def get(self, request, user_id, token):
-#         user_id = force_text(urlsafe_base64_decode(user_id))
-#         user = User.objects.get(pk=user_id)
-
-#         context = {
-#             'form': TeacherLoginForm(),
-#             'message': 'Registration confirmation error. Please click the reset password to generate a new confirmation email.'
-#         }
-
-#         if user and user_tokenizer.check_token(user, token):
-#             user.is_valid = True
-#             user.save()
-#             context['message'] = "Registration complete. Please login"
-#         return render(request, 'clienttemplates/teacherlogin', context)
-
-
-# def teacherregister(request):
-#     if request.method == 'POST':
-#         form = TeacherRegisterForm(request.POST)
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             user.is_active = False
-#             user.save()
-#             current_site = get_current_site(request)
-#             mail_subject = 'Activate your account.'
-#             message = render_to_string('clienttemplates/acc_active_email.html', {
-#                 'user': user,
-#                 'domain': current_site.domain,
-#                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-#                 'token': account_activation_token.make_token(user),
-#             })
-#             to_email = form.cleaned_data.get('email')
-#             email = EmailMessage(mail_subject, message, to=[to_email])
-#             email.send()
-#             return HttpResponse('Please confirm your email address to complete the registration')
-#     else:
-#         form = TeacherRegisterForm()
-#     return render(request, 'clienttemplates/teacherregister.html', {'form': form})
-
-
-# def activate(request, uid64, token):
-#     try:
-#         uid = force_text(urlsafe_base64_decode(uidb64))
-#         user = User.objects.get(pk=uid)
-#     except(TypeError, ValueError, OverflowError,User.DoesNotExist):
-#         user = None
-#     if user is not None and account_activation_token.check_token(user, token):
-#         user.is_active = True
-#         user.save()
-#         # login(request, user)
-
-#         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
-#     else:
-#         return HttpResponse('Activation link is invalid!')
-# class TeacherRegisterView(View):
-#     form_class = TeacherRegisterForm
-#     template_name = 'clienttemplates/teacherregister.html'
-
-#     def get(self, request, *args, **kwargs):
-#         form = self.form_class()
-#         return render(request, self.template_name, {'form': form})
-
-#     def post(self, request, *args, **kwargs):
-#         form = self.form_class(request.POST)
-#         if form.is_valid():
-
-#             user = form.save(commit=False)
-#             user.is_active = False # Deactivate account till it is confirmed
-#             user.save()
-
-#             current_site = get_current_site(request)
-#             subject = 'Activate Your Account'
-#             message = render_to_string('clienttemplates/acc_active_email.html', {
-#                 'user': user,
-#                 'domain': current_site.domain,
-#                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-#                 'token': account_activation_token.make_token(user),
-#             })
-#             user.email_user(subject, message)
-
-#             messages.success(request, ('Please Confirm your email to complete registration.'))
-
-#             return redirect('teacher/login/')
-
-#         return render(request, self.template_name, {'form': form})
-
-# class ActivateAccount(View):
-
-#     def get(self, request, uidb64, token, *args, **kwargs):
-#         try:
-#             uid = force_text(urlsafe_base64_decode(uidb64))
-#             user = User.objects.get(pk=uid)
-#         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-#             user = None
-
-#         if user is not None and account_activation_token.check_token(user, token):
-#             user.is_active = True
-#             # user.profile.email_confirmed = True
-#             user.save()
-#             # login(request, user)
-#             messages.success(request, ('Your account have been confirmed.'))
-#             return redirect('teacher/login/')
-#         else:
-#             messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
-#             return redirect('teacher/register/')
 
 
 class StudentHomeView(StudentRequiredMixin, ListView):
@@ -339,46 +307,54 @@ class StudentHomeView(StudentRequiredMixin, ListView):
         subject_query = request.GET.get('subject')
         location_query = request.GET.get('location')
         
-        if (subject_query != '' and location_query != '') and (subject_query is not None and location_query is not None):
-            qset = qs.filter(Q(subject__name__icontains=subject_query), Q(address__icontains=location_query)).distinct()
-            print(qset)
-            if not qset:
-                queryset = qs.order_by("-id")
-                messages.error(request, "No results found.")          
-                return render(request, "clienttemplates/studenthome.html", {
-                    'teacher_list' : queryset
-                })  
-            else:
-                return render(request, "clienttemplates/studenthome.html", {
-                    'teacher_list' : qset
-                })
+        # if (subject_query != '' and location_query != '') and (subject_query is not None and location_query is not None):
+        #     qset = qs.filter(Q(subject__name__icontains=subject_query), Q(address__icontains=location_query)).distinct()
+        #     print(qset)
+        #     if not qset:
+        #         queryset = qs.order_by("-id")
+        #         messages.error(request, "No results found.")          
+        #         return render(request, "clienttemplates/studenthome.html", {
+        #             'teacher_list' : queryset
+        #         })  
+        #     else:
+        #         return render(request, "clienttemplates/studenthome.html", {
+        #             'teacher_list' : qset
+        #         })
 
-        elif subject_query != '' and subject_query is not None:
-            qset = qs.filter(subject__name__icontains=subject_query) 
-            if not qset:
-                queryset = qs.order_by("-id")  
-                messages.error(request, "No results found.")        
-                return render(request, "clienttemplates/studenthome.html", {
-                    'teacher_list' : queryset
-                })
-            else:
-                return render(request, "clienttemplates/studenthome.html", {
-                    'teacher_list' : qset
-                })
+        # elif subject_query != '' and subject_query is not None:
+        #     qset = qs.filter(subject__name__icontains=subject_query) 
+        #     if not qset:
+        #         queryset = qs.order_by("-id")  
+        #         messages.error(request, "No results found.")        
+        #         return render(request, "clienttemplates/studenthome.html", {
+        #             'teacher_list' : queryset
+        #         })
+        #     else:
+        #         return render(request, "clienttemplates/studenthome.html", {
+        #             'teacher_list' : qset
+        #         })
 
-        elif location_query != '' and location_query is not None:
-            qset = qs.filter(address__icontains=location_query)
-            if not qset:
-                queryset = qs.order_by("-id")
-                messages.error(request, "No results found.")          
-                return render(request, "clienttemplates/studenthome.html", {
-                    'teacher_list' : queryset
-                })  
-            else:
-                return render(request, "clienttemplates/studenthome.html", {
-                    'teacher_list' : qset
-                })
+        # elif location_query != '' and location_query is not None:
+        #     qset = qs.filter(address__icontains=location_query)
+        #     if not qset:
+        #         queryset = qs.order_by("-id")
+        #         messages.error(request, "No results found.")          
+        #         return render(request, "clienttemplates/studenthome.html", {
+        #             'teacher_list' : queryset
+        #         })  
+        #     else:
+        #         return render(request, "clienttemplates/studenthome.html", {
+        #             'teacher_list' : qset
+        #         })
 
+        # else:
+        qset = qs.order_by("-id")
+        paginator = Paginator(qset, 2)
+        page_number = request.GET.get('page', 1)
+        page = paginator.get_page(page_number)
+
+        if page.has_next():
+            next_url = f'?page={page.next_page_number()}'
         else:
             qset = qs.order_by("-id") 
             paginator = Paginator(qset, 8)
@@ -403,13 +379,6 @@ class TeacherProfileView(StudentRequiredMixin,DetailView):
     model = Teacher
     form_class = RatingForm
     context_object_name = "profile"
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     teacher_id = self.kwargs["pk"]
-    #     teacher = Teacher.objects.get(id=teacher_id)
-
-    #     return context
     
     # Rating teachers
     def post(self, request, **kwargs):
@@ -437,9 +406,8 @@ class TeacherProfileView(StudentRequiredMixin,DetailView):
             return HttpResponseRedirect(url)
         else:
             return render(self.request, url)
-
-
-class TeacherHomeView(TeacherRequiredMixin, TemplateView):
+            
+class TeacherHomeView(TeacherRequiredMixin,TemplateView):
     template_name = "clienttemplates/teacherhome.html"
 
     
@@ -455,7 +423,7 @@ class TeacherDeleteView(TeacherRequiredMixin,DeleteView):
     model = Teacher
     context_object_name = "teacherdetail"
 
-class TeacherUpdateView(TeacherRequiredMixin, UpdateView):
+class TeacherUpdateView(TeacherRequiredMixin,UpdateView):
     template_name = "clienttemplates/teacherupdate.html"
     form_class = TeacherUpdateForm
     success_url = reverse_lazy("hometuitionapp:teacherhome")
@@ -472,27 +440,11 @@ class StudentDeleteView(StudentRequiredMixin,DeleteView):
     model = Student
     context_object_name = "studentdetail"
 
-    # if request.method == 'POST':
-    #     form = RateForm(request.POST, i)
-
-
 class StudentUpdateView(StudentRequiredMixin, UpdateView):
     template_name = "clienttemplates/studentupdate.html"
     form_class = StudentUpdateForm
     success_url = reverse_lazy("hometuitionapp:studenthome")
     model = Student
-
-# class SearchView(TemplateView):
-#     template_name = "clienttemplates/searchresult.html"
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         keyword = self.request.GET["query"]
-#         print(keyword, "+++++++++++")
-#         teachers = Teacher.object.filter(Q(address__icontains=keyword)
-#                                          | Q(subject__icontains=keyword))
-#         context["searched_teachers"] = teachers
-#         return context
 
 
 class LogoutView(View):
@@ -646,19 +598,10 @@ class AdminTeacherDeleteView(DeleteView):
     success_url = reverse_lazy("hometuitionapp:adminteacherlist")
     model = Teacher
 
-
 class AdminTeacherDetailView(AdminRequiredMixin, DetailView):
     template_name = "admintemplates/adminteacherdetail.html"
     model = Teacher
     context_object_name = "teacherdetail"
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     teacher_id = self.kwargs["pk"]
-    #     teacher = Teacher.objects.get(id=teacher_id)
-
-    #     return context
-
 
 class AdminAjaxTeacherSearchView(View):
     def get(self, request, *args, **kwargs):
@@ -735,7 +678,7 @@ class AdminAjaxTeacherSearchView(View):
         
 
         # return JsonResponse({"message": "success"})
-
+        
 class AdminLogoutView(View):
     def get(self, request):
         logout(request)
