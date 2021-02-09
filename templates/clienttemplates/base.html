@@ -10,6 +10,11 @@
 	<meta charset="UTF-8" />
 	<meta name="keywords" content="Edulearn Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design"
 	/>
+	<style>
+		#nav-items li a.active{
+			color: #000 !important;
+		}
+	</style>
 	<script>
 		addEventListener("load", function () {
 			setTimeout(hideURLbar, 0);
@@ -17,6 +22,17 @@
 
 		function hideURLbar() {
 			window.scrollTo(0, 1);
+		}
+
+		const currentLocation = location.href;
+		console.log(currentLocation)
+		const navItems = document.getElementsByClassName('nav-link');
+		console.log(navItems);
+		const itemLength = navItems.length;
+		for (let i =0; i<itemLength; i++) {
+			if(navItems[i].href === currentLocation){
+				navItems[i].className = "active";
+			}
 		}
 	</script>
 	<!--// Meta tag Keywords -->
@@ -112,17 +128,16 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
-				<ul class="navbar-nav justify-content-center">
-					<li class="nav-item active">
-						<a class="nav-link text-white" href="{% url 'hometuitionapp:home' %}">Home
-							<span class="sr-only">(current)</span>
+				<ul id="nav-items" class="navbar-nav justify-content-center">
+					<li class="nav-item">
+						<a id="nav-link" class="nav-link text-white" href="{% url 'hometuitionapp:home' %}">Home
 						</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link text-white" href="{% url 'hometuitionapp:aboutus' %}">About Us</a>
+						<a id="nav-link" class="nav-link text-white" href="{% url 'hometuitionapp:aboutus' %}">About Us</a>
 					</li>
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<a id="nav-link" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							Courses
 						</a>
 						<div class="dropdown-menu">
@@ -153,10 +168,10 @@
 						</div>
 					</li> -->
 					<li class="nav-item">
-						<a class="nav-link text-white" href="#">What We Do</a>
+						<a id="nav-link" class="nav-link text-white" href="#">What We Do</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link text-white" href="{% url 'hometuitionapp:contactus' %}">Contact Us</a>
+						<a id="nav-link" class="nav-link text-white" href="{% url 'hometuitionapp:contactus' %}">Contact Us</a>
 					</li>
 				</ul>
 			</div>
@@ -272,8 +287,7 @@
 
 
 
-	<!-- Js files -->
-	<script src="{% static 'clientstatic/js/app.js' %}"></script>
+	
 	<!-- JavaScript -->
 	<script src="{% static 'clientstatic/js/jquery-2.2.3.min.js' %}"></script>
 	<!-- Default-JavaScript-File -->
