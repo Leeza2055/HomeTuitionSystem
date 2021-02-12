@@ -2,16 +2,12 @@
 {% load static %}
 {% block content %}
 
-<!-- main-heading -->
-<h2 class="main-title-w3layouts mb-2 text-center">Widgets</h2>
-<!--// main-heading -->
-
 <div class="container-fluid">
     <div class="row">
         <!-- Stats -->
         <div class="outer-w3-agile col-xl">
             <div class="work-progres">
-                <h4 class="tittle-w3-agileits mb-4">Recent Followers</h4>
+                <h4 class="tittle-w3-agileits mb-4">Teacher List</h4>
                 <hr>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -31,8 +27,8 @@
                                 <td><a href="{% url 'hometuitionapp:adminteacherdetail' teacher.pk %}">{{teacher.name}}</a></td>
                         		<td>{{teacher.created_at}}</td>
                         		<td>{% if teacher.active %}active{% else %}inactive{% endif %}</td>
-                        		<td><a href="{% url 'hometuitionapp:adminteacherupdate' teacher.pk %}">Update</a>
-                            		<a href="{% url 'hometuitionapp:adminteacherdelete' teacher.pk %}">Delete</a>
+                        		<td><a href="{% url 'hometuitionapp:adminteacherupdate' teacher.pk %}" class="btn btn-primary btn-xs">Update</a>
+                            		<a href="{% url 'hometuitionapp:adminteacherdelete' teacher.pk %}" class="btn btn-danger btn-xs">Delete</a>
                             	</td>
                         	</tr>
                         	{% endfor %}

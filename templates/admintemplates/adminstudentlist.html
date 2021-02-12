@@ -3,14 +3,14 @@
 {% block content %}
 
 <!-- main-heading -->
-<h2 class="main-title-w3layouts mb-2 text-center">Widgets</h2>
+<!-- <h2 class="main-title-w3layouts mb-2 text-center">Widgets</h2> -->
 <!--// main-heading -->
 
 <div class="container-fluid">
     <div class="row">
         <div class="outer-w3-agile col-xl">
             <div class="work-progres">
-                <h4 class="tittle-w3-agileits mb-4">Recent Followers</h4>
+                <h4 class="tittle-w3-agileits mb-4">Student List</h4>
                 <hr>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -30,8 +30,8 @@
                                         <td><a href="{% url 'hometuitionapp:adminstudentdetail' student.pk %}">{{student.name}}</a></td>
                                         <td>{{student.created_at}}</td>
                                         <td>{% if student.active %}active{% else %}inactive{% endif %}</td>
-                                        <td><a href="{% url 'hometuitionapp:adminstudentupdate' student.pk %}">Update</a>
-                                        <a href="{% url 'hometuitionapp:adminstudentdelete' student.pk %}">Delete</a></td>
+                                        <td><a href="{% url 'hometuitionapp:adminstudentupdate' student.pk %}" class="btn btn-primary btn-sm">Update</a>
+                                        <a href="{% url 'hometuitionapp:adminstudentdelete' student.pk %}" class="btn btn-danger btn-sm">Delete</a></td>
                                     </tr>
                             {% endfor %}
                         </tbody>

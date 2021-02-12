@@ -1,4 +1,4 @@
-{% extends "clienttemplates/base.html" %}
+{% extends "clienttemplates/studentbase.html" %}
 {% load static %}
     <!-- Font Awesome 5 link -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
@@ -16,7 +16,7 @@
     </style>
 {% endblock %}
 {% block content %}
-<h1 style="text-align: center;">Teacher Profile</h1>
+<h1 style="text-align: center;" class="mt-3">Teacher Profile</h1>
 <div class="container mb-4">
     <h1>{{profile.name}}</h1>
     <!-- <h3>{{profile.name}}</h3> -->
@@ -64,16 +64,16 @@
                 <input type="radio" name="rate" value="4" class="my-btn" id="fourth"> </input><label id="four" class="fas fa-star" for="fourth"></label>
                 <input type="radio" name="rate" value="5" class="my-btn" id="fifth"></input><label id="five" class="fas fa-star" for="fifth"></label>
 
-                <button type="submit">Submit</button>
-
+                <button class="btn btn-primary" type="submit">Submit</button>
             </form>
+            <!-- Displaying message -->
             {% for message in messages %}
-              <div class="alert {{ message.tags }} alert-dismissible" role="alert" style="width: 70%; margin-left: auto; margin-right: auto;">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                {{ message }}
-              </div>
+                <div class="alert {{ message.tags }} alert-dismissible" role="alert" style="width: 100%; margin-left: auto; margin-right: auto; margin-top: 1rem;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ message }}
+                </div>
             {% endfor %}
         </div>
     </div>

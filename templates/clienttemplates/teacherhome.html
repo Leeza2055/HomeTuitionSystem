@@ -1,7 +1,6 @@
-{% extends "clienttemplates/base.html" %}
+{% extends "clienttemplates/teacherbase.html" %}
 {% load static %}
 {% block content %}
-<h3>Welcome {{request.user}}</h3>
 {% if messages %}
     	<div class="col-lg-3 color03">
         	<ul class="messages">
@@ -11,9 +10,6 @@
         	</ul>
     	</div>
 {% endif %}
-<a href="{% url 'hometuitionapp:teacherdetail' request.user.teacher.id %}">Profile</a>
 <a href="{% url 'hometuitionapp:teachernotificationlist' %}">Notification</a>
 
-
-<a href="{% url 'hometuitionapp:logout' %}">Logout</a>
 {% endblock %}

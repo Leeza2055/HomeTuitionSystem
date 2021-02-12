@@ -10,30 +10,27 @@
 
 <form action="" enctype="multipart/form-data" method="post">
 	{% csrf_token %}
-
-
-	
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Username</label>
-				<!-- <input type="text" class="form-control" name="username" placeholder="" required=""> -->{{form.username}}
+				{{form.username}}
 				{{form.username.errors}}
 			</div>
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Email</label>
-				<!-- <input type="email" class="form-control" name="email" placeholder="" required=""> -->{{form.email}}
+				{{form.email}}
 				{{form.email.errors}}
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Password</label>
-				<!-- <input type="password" class="form-control" name="Password" placeholder="" required=""> -->{{form.password}}
+				{{form.password}}
 			</div>
 
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Confirm Password</label>
-				<!-- <input type="password" class="form-control" name="confirmPassword" placeholder="" required=""> -->
+				
 				{{form.confirm_password}}
 				
 				{{form.confirm_password.errors}}
@@ -43,39 +40,30 @@
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Name</label>
-				<!-- <input type="text" class="form-control" name="name" placeholder="" required=""> -->
 				{{form.name}}
 			</div>
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Phone no</label>
-				<!-- <input type="number" class="form-control" name="phoneno" placeholder="" required=""> -->
 				{{form.phone_no}}
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Address</label>
-				<!-- <input type="text" class="form-control" name="address" placeholder="" required=""> -->{{form.address}}
+				{{form.address}}
 			</div>
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Report Card</label>
-				<!-- <input type="file" class="form-control-file" name="reportCard" placeholder="" required=""> -->{{form.report_card}}
+				{{form.report_card}}
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Course</label>
-				<!-- <select class="form-control" name="course" id="" required>
-					<option value="------"></option> -->
-					{{form.course}}
-				<!-- </select> -->
+				{{form.course}}
 			</div>
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Subject</label>
-				<!-- <select class="form-control" name="subject" id="" required>
-					<option value="------"></option>
-					
-				</select> -->
 				{{form.subject}}
 			</div>
 		</div>
