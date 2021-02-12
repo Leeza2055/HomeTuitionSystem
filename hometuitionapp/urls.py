@@ -39,8 +39,19 @@ urlpatterns = [
     path('student/<int:pk>/update/',
          StudentUpdateView.as_view(), name="studentupdate"),
     path('student/<int:pk>/delete/',
-         TeacherDeleteView.as_view(), name="studentdelete"),
+         StudentDeleteView.as_view(), name="studentdelete"),
     path('logout/', LogoutView.as_view(), name="logout"),
+    path('teacher/notification/create/', TeacherNotificationCreateView.as_view(), name="teachernotificationcreate"),
+    path('teacher/hire/', AjaxTeacherHireView.as_view(), name="ajaxhireteacher"),
+    # path('student/accept/', AjaxStudentAcceptView.as_view(), name="ajaxstudentaccept"),
+    path('student/<int:pk>notification/update/', StudentNotificationUpdateView.as_view(), name="studentnotificationupdate"),
+    path('teacher/notification/list/', TeacherNotificationListView.as_view(), name="teachernotificationlist"),
+    path('student/notification/list/', StudentNotificationListView.as_view(), name="studentnotificationlist"),
+    path('teacher/notification/<int:pk>/detail/',
+         TeacherNotificationDetailView.as_view(), name="teachernotificationdetail"),
+    path("ajax/hiring/accept/request/", AjaxHiringAcceptRequestView.as_view(), name="ajaxacceptrequest"),
+    path("ajax/hiring/reject/request", AjaxHiringRejectRequestView.as_view(), name="ajaxrejectrequest"),
+    path('payment/status/', PaymentStatusView.as_view(), name="paymentstatus"),
 
 
     # admin side

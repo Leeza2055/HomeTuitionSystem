@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from django.db.models import Avg, Count
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 # # Create your models here.
 
 # # This model will not be used to create database table instead it is used as a base class for other models
@@ -127,3 +129,24 @@ class Student(TimeStamp):
 
     def __str__(self):
         return self.name
+
+class Hiring(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    hire_date = models.DateTimeField(auto_now=True)
+    accept = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.teacher.name
+
+class Payment(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    amount = models.IntegerField()
+    paid = models.BooleanField(default=False)
+    payment_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.teacher.name
+

@@ -240,6 +240,13 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
         mail.content_subtype = 'html'
         mail.send()
         return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
+            return redirect('/teacher/home/')
+        else:
+            pass
+        return super().dispatch(request, *args, **kwargs)
         
 
 class ConfirmRegistrationView(View):
@@ -365,29 +372,30 @@ class TeacherProfileView(StudentRequiredMixin,DetailView):
     def post(self, request, **kwargs):
         url = request.META.get('HTTP_REFERER') #GET last url
         form = self.form_class(request.POST)
-        print(self.request)
         if form.is_valid():
-            data = Rating() #create relation with model
-            data.rate = form.cleaned_data['rate']
+            user_rate = form.cleaned_data['rate']
             teacher_id = self.kwargs["pk"]
-            data.teacher = Teacher.objects.get(id=teacher_id)
-            try:
-                print(self.request)
-                # data.user = User.objects.get(user=self.request.user)
-                current_user = request.user
-                print(current_user)
-                data.user = User.objects.get(id=current_user.id)
-                print(data.user)
-            except:
-                print("except")
-            # current_user = request.user
-            # print(current_user, '\n ++++++++++++++++++++++++')
-            # data.user_id = current_user.id
-            data.save()
-            messages.success(request, "Your review has been sent")
+            rated_teacher = Teacher.objects.get(id=teacher_id)
+            current_user = request.user
+            student_user = User.objects.get(id=current_user.id)
+
+            obj, created = Rating.objects.update_or_create(
+                teacher= teacher_id, user =  current_user.id,
+                defaults = { 'rate': user_rate,
+                'teacher' : rated_teacher,
+                'user' : student_user
+                },
+            )
+            print(obj)
+            if(created):
+                messages.success(request,"Your review has been sent")
+            else:
+                messages.success(request,"Your review has been updated")
             return HttpResponseRedirect(url)
         else:
             return render(self.request, url)
+
+    
             
 class TeacherHomeView(TeacherRequiredMixin,TemplateView):
     template_name = "clienttemplates/teacherhome.html"
@@ -435,6 +443,124 @@ class LogoutView(View):
         return redirect("/login")
 
 
+class TeacherNotificationCreateView(SuccessMessageMixin,StudentRequiredMixin, CreateView):
+    template_name = "clienttemplates/teachernotificationcreate.html"
+    form_class = TeacherNotification
+    success_url = reverse_lazy("hometuitionapp:studenthome")
+    # success_message = "You have sent a request to %(teacher)s"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        hires = Hiring.objects.all()
+        return context
+
+    def form_valid(self, form):
+        teacher = form.cleaned_data['teacher']
+        
+        print(teacher,'\n 000000000000000000000000')
+        return super().form_valid(form)
+
+    # def post(self, request, **kwargs):
+    #     url = request.META.get('HTTP_REFERER')
+    #     form = self.form_class(request.POST)
+    #     if form.is_valid:
+    #         current_user = request.user
+    #         # teacher_id = request.POST.get("teacher")
+
+    #         student_user = Student.objects.get(user_id=current_user.id)
+
+    #         obj, created = Hiring.objects.update_or_create(
+    #             student = current_user.id,
+    #             defaults = {
+    #             'student': student_user
+
+    #             },
+    #         )
+    #         print(obj)
+    #         if(created):
+    #             messages.success(request,"You have sent a request to %(teacher)s")
+    #         else:
+    #             messages.success(request,"Your request to %(teacher)s has been updated")
+    #         return HttpResponseRedirect(url)
+    #     else:
+    #         return render(self.request, url)
+
+    def post(self, request, *args, **kwargs):
+        # teacher_id = request.POST.get("teacher_id")
+        # print(teacher_id)
+        print("asdfasdfasdfsadf")
+
+        return JsonResponse({"message":"success"})
+
+
+class AjaxTeacherHireView(View):
+    def post(self, request, *args, **kwargs):
+        teacher_id = request.POST.get("teacher_id")
+        teacher = Teacher.objects.get(id=teacher_id)
+        student = request.user.student
+        if Hiring.objects.filter(teacher=teacher, student=request.user.student).exists():
+            return JsonResponse({"message":"already"})
+        else:
+            Hiring.objects.create(teacher=teacher, student=request.user.student)
+            return JsonResponse({"message":"success"})
+
+# class AjaxStudentAcceptView(View):
+#     def post(self, request, *args, **kwargs):
+
+class PaymentStatusView(CreateView):
+    template_name = "clienttemplates/payment.html"
+    form_class = PaymentForm
+    success_url = reverse_lazy("hometuitionapp:studenthome")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pay = Payment.objects.all()
+        return context
+
+
+
+class StudentNotificationUpdateView(SuccessMessageMixin,TeacherRequiredMixin, UpdateView):
+    template_name = "clienttemplates/studentnotificationcreate.html"
+    form_class = TeacherNotification
+    success_url = reverse_lazy("hometuitionapp:teacherhome")
+    success_message = "You accepted the request of %(student)s"
+    model = Hiring
+
+
+class TeacherNotificationListView(TeacherRequiredMixin, ListView):
+    template_name = "clienttemplates/teachernotificationlist.html"
+    queryset = Hiring.objects.all()
+    context_object_name = "teachernotificationlist"
+
+class StudentNotificationListView(StudentRequiredMixin, ListView):
+    template_name = "clienttemplates/studentnotificationlist.html"
+    queryset = Hiring.objects.all()
+    context_object_name = "studentnotificationlist"
+
+class TeacherNotificationDetailView(TeacherRequiredMixin, DetailView):
+    template_name = "clienttemplates/teachernotificationdetail.html"
+    model = Hiring
+    context_object_name = "teachernotificationdetail"
+
+
+class AjaxHiringAcceptRequestView(View):
+    def get(self, request, *args, **kwargs):
+        obj = Hiring.objects.get(id=request.GET.get("hiring_id"))
+        obj.accept = True
+        obj.save()
+
+        return JsonResponse({"message":"success"})
+
+class AjaxHiringRejectRequestView(View):
+    def get(self, request, *args, **kwargs):
+        obj = Hiring.objects.get(id=request.GET.get("hiring_id"))
+        obj.accept = False
+        obj.save()
+
+        return JsonResponse({"message":"success"})
+
+
+
 class AdminRequiredMixin(object):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_superuser:
@@ -444,6 +570,13 @@ class AdminRequiredMixin(object):
 
 class AdminHomeView(AdminRequiredMixin, TemplateView):
     template_name = "admintemplates/adminhome.html"
+
+    #to send multiple context in single view
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['teacher_list'] = Teacher.objects.count()
+        data['student_list'] = Student.objects.count()
+        data['course_list'] = Course.objects.count()
 
 
 class AdminLoginView(FormView):

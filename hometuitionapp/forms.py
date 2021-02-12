@@ -228,3 +228,18 @@ class SubjectForm(forms.ModelForm):
     class Meta:
         model = Subject
         fields = "__all__"
+
+
+class TeacherNotification(forms.ModelForm):
+    class Meta:
+        model = Hiring
+        fields = ['teacher','student','accept']
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = Payment
+        fields = "__all__"
+    
+
+
+        

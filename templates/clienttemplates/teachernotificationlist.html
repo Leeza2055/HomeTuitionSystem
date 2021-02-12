@@ -1,0 +1,11 @@
+{% extends "clienttemplates/base.html" %}
+{% load static %}
+{% block content %}
+{% for notification  in teachernotificationlist %}
+<a href="{% url 'hometuitionapp:teachernotificationdetail' notification.pk %}"><li>{{notification.student}} hired {{notification.teacher}}</li></a>
+
+                
+{% endfor %}
+               
+
+{% endblock %}

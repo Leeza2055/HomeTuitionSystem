@@ -1,0 +1,10 @@
+{% extends "clienttemplates/base.html" %}
+{% load static %}
+{% block content %}
+{% for notification  in studentnotificationlist %}
+<a href="" ><li>{{notification.teacher}} accepted the request of {{notification.student}} at {{notification.hire_date}}</li></a>
+                
+{% endfor %}
+               
+
+{% endblock %}
