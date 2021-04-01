@@ -380,10 +380,10 @@ class TeacherProfileView(StudentRequiredMixin,DetailView):
             student_user = User.objects.get(id=current_user.id)
 
             obj, created = Rating.objects.update_or_create(
-                teacher= teacher_id, user =  current_user.id,
+                teacher= rated_teacher.id, user =  current_user.id,
                 defaults = { 'rate': user_rate,
                 'teacher' : rated_teacher,
-                'user' : student_user
+                'user' : student_user,
                 },
             )
             print(obj)
@@ -413,6 +413,7 @@ class TeacherDeleteView(TeacherRequiredMixin,DeleteView):
     template_name = "clienttemplates/teacherdelete.html"
     success_url = reverse_lazy("hometuitionapp:teacherregister")
     model = Teacher
+    context_object_name = "teacherdetail"
 
 class TeacherUpdateView(TeacherRequiredMixin,UpdateView):
     template_name = "clienttemplates/teacherupdate.html"
@@ -429,6 +430,7 @@ class StudentDeleteView(StudentRequiredMixin,DeleteView):
     template_name = "clienttemplates/studentdelete.html"
     success_url = reverse_lazy("hometuitionapp:studentregister")
     model = Student
+    context_object_name = "studentdetail"
 
 class StudentUpdateView(StudentRequiredMixin, UpdateView):
     template_name = "clienttemplates/studentupdate.html"
@@ -507,17 +509,19 @@ class AjaxTeacherHireView(View):
 # class AjaxStudentAcceptView(View):
 #     def post(self, request, *args, **kwargs):
 
-class PaymentStatusView(CreateView):
+# class PaymentStatusView(CreateView):
+#     template_name = "clienttemplates/payment.html"
+#     form_class = PaymentForm
+#     success_url = reverse_lazy("hometuitionapp:studenthome")
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         pay = Payment.objects.all()
+#         return context
+
+
+class PaymentStatusView(TemplateView):
     template_name = "clienttemplates/payment.html"
-    form_class = PaymentForm
-    success_url = reverse_lazy("hometuitionapp:studenthome")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        pay = Payment.objects.all()
-        return context
-
-
 
 class StudentNotificationUpdateView(SuccessMessageMixin,TeacherRequiredMixin, UpdateView):
     template_name = "clienttemplates/studentnotificationcreate.html"
@@ -577,6 +581,7 @@ class AdminHomeView(AdminRequiredMixin, TemplateView):
         data['teacher_list'] = Teacher.objects.count()
         data['student_list'] = Student.objects.count()
         data['course_list'] = Course.objects.count()
+        return data
 
 
 class AdminLoginView(FormView):
@@ -616,6 +621,11 @@ class AdminCourseListView(AdminRequiredMixin, ListView):
     template_name = "admintemplates/admincourselist.html"
     queryset = Course.objects.all().order_by("-id")
     context_object_name = "courselist"
+
+class AdminHireListView(AdminRequiredMixin, ListView):
+    template_name = "admintemplates/adminhirelist.html"
+    queryset = Hiring.objects.all().order_by("-id")
+    context_object_name = "hirelist"
 
 
 class AdminCourseCreateView(AdminRequiredMixin, CreateView):
@@ -714,6 +724,7 @@ class AdminAjaxTeacherSearchView(View):
     def get(self, request, *args, **kwargs):
         subject = self.request.GET.get("subject")
         location = self.request.GET.get("location")
+        print(subject, location, '\n +++++++++++++++++++++++')
         if subject != "" and location != "":
             # teacherlist = Teacher.objects.all()
             # listobj = teacherlist.filter(subject__a=subject)
@@ -735,6 +746,8 @@ class AdminAjaxTeacherSearchView(View):
             print(teacherlist)
         else:
             teacherlist = Teacher.objects.all()
+            # print("Else +++++++++++++++++")
+            # teacherlist = []
 
 
         page = self.request.GET.get("page", 1)

@@ -10,11 +10,6 @@
 	<meta charset="UTF-8" />
 	<meta name="keywords" content="Edulearn Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design"
 	/>
-	<style>
-		#nav-items li a.active{
-			color: #000 !important;
-		}
-	</style>
 	<script>
 		addEventListener("load", function () {
 			setTimeout(hideURLbar, 0);
@@ -22,17 +17,6 @@
 
 		function hideURLbar() {
 			window.scrollTo(0, 1);
-		}
-
-		const currentLocation = location.href;
-		console.log(currentLocation)
-		const navItems = document.getElementsByClassName('nav-link');
-		console.log(navItems);
-		const itemLength = navItems.length;
-		for (let i =0; i<itemLength; i++) {
-			if(navItems[i].href === currentLocation){
-				navItems[i].className = "active";
-			}
 		}
 	</script>
 	<!--// Meta tag Keywords -->
@@ -97,7 +81,7 @@
 		<div class="middle-w3ls-nav py-2">
 			<div class="container">
 				<div class="row">
-					<a class="logo font-italic font-weight-bold col-lg-4 text-lg-left text-center" href="{% url 'hometuitionapp:home' %}">Home Tuition</a>
+					<a class="logo font-italic font-weight-bold col-lg-4 text-lg-left text-center" href="{% url 'hometuitionapp:studenthome' %}">Home Tuition</a>
 					<div class="col-lg-8 right-info-agiles mt-lg-0 mt-sm-3 mt-1">
 						<div class="row">
 							<div class="col-sm-4 nav-middle">
@@ -107,11 +91,11 @@
 								
 							</div>
 							
-							<div class="col-sm-6 col-6 top-login-butt text-right mt-sm-2">
+							<!-- <div class="col-sm-6 col-6 top-login-butt text-right mt-sm-2">
 								<a href="{% url 'hometuitionapp:teacherregister' %}" class="button-head-mow3 text-white">Become Tutor</a>
 								<a href="{% url 'hometuitionapp:login' %}" class="button-head-mow3 text-white">Login</a>
 
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -128,19 +112,20 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
-				<ul id="nav-items" class="navbar-nav justify-content-center">
+				<ul class="navbar-nav justify-content-center">
 					<li class="nav-item">
-						<a id="nav-link" class="nav-link text-white" href="{% url 'hometuitionapp:home' %}">Home
+						<a class="nav-link text-white" href="{% url 'hometuitionapp:studenthome' %}">Home
+							<span class="sr-only">(current)</span>
 						</a>
 					</li>
-					<li class="nav-item">
-						<a id="nav-link" class="nav-link text-white" href="{% url 'hometuitionapp:aboutus' %}">About Us</a>
-					</li>
-					<li class="nav-item dropdown">
-						<a id="nav-link" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<!-- <li class="nav-item">
+						<a class="nav-link text-white" href="{% url 'hometuitionapp:aboutus' %}">About Us</a>
+					</li> -->
+					<!-- <li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							Courses
 						</a>
-						<!-- <div class="dropdown-menu">
+						<div class="dropdown-menu">
 							<a class="dropdown-item" href="language.html">Language</a>
 							<a class="dropdown-item" href="communication.html">Communication</a>
 							<a class="dropdown-item" href="business.html">Business</a>
@@ -150,8 +135,8 @@
 							<a class="dropdown-item" href="course_details.html">Course Details</a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="form.html">Apply Now</a>
-						</div> -->
-					</li>
+						</div>
+					</li> -->
 					<!-- <li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							Pages
@@ -168,10 +153,26 @@
 						</div>
 					</li> -->
 					<!-- <li class="nav-item">
-						<a id="nav-link" class="nav-link text-white" href="#">What We Do</a>
-					</li> -->
+						<a class="nav-link text-white" href="#">What We Do</a>
+					</li>
 					<li class="nav-item">
-						<a id="nav-link" class="nav-link text-white" href="{% url 'hometuitionapp:contactus' %}">Contact Us</a>
+						<a class="nav-link text-white" href="{% url 'hometuitionapp:contactus' %}">Contact Us</a>
+					</li> -->
+				</ul>
+                <ul class="navbar-nav justify-content-center navbar-right" style=" margin: revert;"> 
+                    <li class="nav-item">
+						<p class="text-white mr-2">Welcome {{request.user}}</p> 
+					</li>
+					<li class="nav-item dropdown">
+						<a class="dropdown-toggle" style=" color: black;" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fas fa-2x fa-user"></i>
+						</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="{% url 'hometuitionapp:studentdetail' request.user.student.id %}">Profile</a>
+							<a class="dropdown-item" href="{% url 'hometuitionapp:studentnotificationlist' %}">Hiring Notification</a>
+							<a class="dropdown-item" href="{% url 'hometuitionapp:paymentstatus' %}">Payment</a>
+							<a class="dropdown-item" href="{% url 'hometuitionapp:logout' %}">Logout</a>
+						</div>
 					</li>
 				</ul>
 			</div>
@@ -227,12 +228,12 @@
 					<h6 class="text-white text-capitalize mb-4">Contacts</h6>
 
 					<p class="para-agileits-w3layouts text-white">
-						<i class="fas fa-map-marker pr-3"></i>Lalitpur, Nepal</p>
+						<i class="fas fa-map-marker pr-3"></i>25095 Blue Ravine Rd,USA</p>
 					<p class="para-agileits-w3layouts text-white my-sm-3 my-2">
-						<i class="fas fa-phone pr-3"></i>9860125245</p>
+						<i class="fas fa-phone pr-3"></i>032 625 4592</p>
 					<p class="para-agileits-w3layouts">
 						<i class="far fa-envelope-open pr-2"></i>
-						<a href="mailto:mail@example.com" class=" text-white">tuitionsystem07@gmail.com</a>
+						<a href="mailto:mail@example.com" class=" text-white">info@example.com</a>
 					</p>
 					<!-- social icons -->
 					<!-- <div class="social-icons text-lg-right text-center col-lg-4 mt-lg-0 mt-3">
@@ -258,7 +259,7 @@
 		<div class="copyright-agiles py-3">
 			<div class="container">
 				<div class="row">
-					<p class="col-lg-8 copy-right-grids text-white text-lg-left text-center mt-lg-1">© 2021 HomeTuition. All Rights Reserved | 
+					<p class="col-lg-8 copy-right-grids text-white text-lg-left text-center mt-lg-1">© 2020 HomeTuition. All Rights Reserved | 
 						<a href="#" target="_blank">Terms of Use</a>
 					</p>
 					<!-- social icons -->
@@ -287,7 +288,7 @@
 
 
 
-	
+	<!-- Js files -->
 	<!-- JavaScript -->
 	<script src="{% static 'clientstatic/js/jquery-2.2.3.min.js' %}"></script>
 	<!-- Default-JavaScript-File -->
@@ -343,6 +344,8 @@
 	<script src="{% static 'clientstatic/js/edulearn.js' %}"></script>
 
 	<!-- //Js files -->
+	{% block js %}
+	{% endblock js %}
 
 </body>
 

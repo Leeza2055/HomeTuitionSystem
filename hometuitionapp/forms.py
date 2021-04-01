@@ -235,10 +235,10 @@ class TeacherNotification(forms.ModelForm):
         model = Hiring
         fields = ['teacher','student','accept']
 
-class PaymentForm(forms.ModelForm):
-    class Meta:
-        model = Payment
-        fields = "__all__"
+# class PaymentForm(forms.ModelForm):
+#     class Meta:
+#         model = Payment
+#         fields = "__all__"
     
 
 

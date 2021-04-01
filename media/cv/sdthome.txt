@@ -1,7 +1,12 @@
-{% extends "clienttemplates/studentbase.html" %}
+{% extends "clienttemplates/base.html" %}
 {% load static %}
 {% block content %}
+<a href="{% url 'hometuitionapp:logout' %}">Logout</a>
 <h1 style="text-align: center;">Teacher List</h1>
+<h3>Welcome {{request.user}}</h3>
+<a href="{% url 'hometuitionapp:studentnotificationlist' %}">Notification</a>
+<a href="{% url 'hometuitionapp:paymentstatus' %}">Payment</a>
+
 {% if messages %}
     	<div class="col-lg-3 color03">
         	<ul class="messages">
@@ -11,6 +16,7 @@
         	</ul>
     	</div>
 {% endif %}
+<a href="{% url 'hometuitionapp:studentdetail' request.user.student.id %}">Profile</a>
 
 <form method="GET" action="">
 	<div class="container form-row my-2" style="width: 70%; margin-left: auto; margin-right: auto;">
@@ -97,7 +103,6 @@
 		e.preventDefault();
 		var subject = $('.subject_val').val();
 		var location = $('.location_val').val();
-		// alert("alert")
 		if(subject == "" && location == ""){
 			alert("Empty Fill")
 		}
@@ -112,11 +117,11 @@
 				// alert("success");
 				$('#ajaxsearch').html(data)
 			}
-		});
+		})
 		}
 		
 		
-	});
+	})
 </script>
 
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "clienttemplates/base.html" %}
+{% extends "clienttemplates/teacherbase.html" %}
 {% load static %}
 {% block content %}
 <h1>{{teacherdetail.name}}</h1>
@@ -13,9 +13,12 @@
 <p>Citizenship:{{teacherdetail.citizenship}}</p>
 <p>Course:{{teacherdetail.course}}</p>
 <p>Subject:{{teacherdetail.subject}}</p>
-<a href="{% url 'hometuitionapp:teacherupdate' request.user.teacher.id %}">Update</a>
+<div class="mb-3">
 
-<a href="{% url 'hometuitionapp:teacherdelete' request.user.teacher.id %}">Delete</a>
+    <a class="btn btn-primary" style="width: 25%;" href="{% url 'hometuitionapp:teacherupdate' request.user.teacher.id %}">Update</a>
+    
+    <a class="btn btn-danger" style="width: 25%;" href="{% url 'hometuitionapp:teacherdelete' request.user.teacher.id %}">Delete</a>
+</div>
 {% endblock %}
 
 
