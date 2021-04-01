@@ -7,28 +7,31 @@
         <!-- Stats -->
         <div class="outer-w3-agile col-xl">
             <div class="work-progres">
-                <h4 class="tittle-w3-agileits mb-4">Subject List</h4>
+                <h4 class="tittle-w3-agileits mb-4">Hire List</h4>
                 <hr>
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
+                                <th>Teacher</th>
+                                <th>Student</th>
                                 <th>Created</th>
-                                <th>Status</th> 
-                                <th>Action</th>
+                                <th>Status</th>
+
+                                <!-- <th>Status</th>  -->
+                                <!-- <th>Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
-                            {% for subject in subjectlist %}
+                            {% for hire in hirelist %}
                             		<tr>
                             			<td>{{forloop.counter}}</td>
-                            			<td>{{subject.name}}</td>
-                            			<td>{{subject.created_at}}</td>
-                            			<td>{% if subject.active %}active{% else %}inactive{% endif %}</td>
-                            			<td><a href="{% url 'hometuitionapp:adminsubjectupdate' subject.pk %}" class="btn btn-primary btn-sm">Update</a>
-                            			<a href="{% url 'hometuitionapp:adminsubjectdelete' subject.pk %}" class="btn btn-danger btn-sm">Delete</a></td>
+                                        <td>{{hire.teacher}}</td>
+                            			<td>{{hire.student}}</td>
+                                        <td>{{hire.hire_date}}</td>
+                            			<td>{{hire.accept}}</td>
+                            			
                             		</tr>
                             {% endfor %}
                         </tbody>

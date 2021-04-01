@@ -58,6 +58,7 @@
             <h4 class="mb-3">Your Rating</h4>
             <hr>
             <form class="rate-form" action="" method="POST">
+                {% csrf_token %}
                 <input type="radio" name="rate" value="1" class="my-btn" id="first"></input><label id="one" class="fas fa-star checked" for="first"></label>
                 <input type="radio" name="rate" value="2" class="my-btn" id="second"></input><label id="two" class="fas fa-star checked" for="second"></label>
                 <input type="radio" name="rate" value="3" class="my-btn" id="third"></input><label id="three" class="fas fa-star" for="third"></label>
