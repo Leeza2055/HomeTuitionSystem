@@ -191,6 +191,7 @@ class TeacherLoginView(FormView):
         pword = form.cleaned_data["password"]
         user = authenticate(username=uname, password=pword)
         if user is not None:
+            print(user)
             login(self.request, user)
 
         else:
@@ -249,6 +250,14 @@ class TeacherRegisterView(SuccessMessageMixin, CreateView):
         return super().dispatch(request, *args, **kwargs)
         
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.groups.filter(name="teacher").exists():
+            return redirect('/teacher/home/')
+        else:
+            pass
+        return super().dispatch(request, *args, **kwargs)
+
+    
 class ConfirmRegistrationView(View):
     def get(self, request, user_id, token):
         user_id = force_text(urlsafe_base64_decode(user_id))
@@ -354,21 +363,31 @@ class StudentHomeView(StudentRequiredMixin, ListView):
         if page.has_next():
             next_url = f'?page={page.next_page_number()}'
         else:
-            next_url = ''
-        if page.has_previous():
-            prev_url = f'?page={page.previous_page_number()}'
-        else:
-            prev_url = ''
+            qset = qs.order_by("-id") 
+            paginator = Paginator(qset, 8)
+            page_number = request.GET.get('page', 1)
+            page = paginator.get_page(page_number)
 
-        return render(request, "clienttemplates/studenthome.html", { 'teacher_list' : page, 'next_page_url' : next_url, 'prev_page_url' : prev_url
-        })
-      
+            if page.has_next():
+                next_url = f'?page={page.next_page_number()}'
+            else:
+                next_url = ''
+
+            if page.has_previous():
+                prev_url = f'?page={page.previous_page_number()}'
+            else:
+                prev_url = ''
+
+            return render(request, "clienttemplates/studenthome.html", { 'teacher_list' : page, 'next_page_url' : next_url, 'prev_page_url' : prev_url
+            })
+    
 class TeacherProfileView(StudentRequiredMixin,DetailView):
     template_name = "clienttemplates/teacherprofile.html"
     model = Teacher
     form_class = RatingForm
     context_object_name = "profile"
     
+    # Rating teachers
     def post(self, request, **kwargs):
         url = request.META.get('HTTP_REFERER') #GET last url
         form = self.form_class(request.POST)
@@ -405,8 +424,6 @@ class TeacherHomeView(TeacherRequiredMixin,TemplateView):
 class TeacherDetailView(TeacherRequiredMixin,DetailView):
     template_name = "clienttemplates/teacherdetail.html"
     model = Teacher
-    form_class = RatingForm
-    # context_object_name = "profile"
     context_object_name = "teacherdetail"
 
 class TeacherDeleteView(TeacherRequiredMixin,DeleteView):
@@ -575,7 +592,7 @@ class AdminRequiredMixin(object):
 class AdminHomeView(AdminRequiredMixin, TemplateView):
     template_name = "admintemplates/adminhome.html"
 
-    #to send multiple context in single view
+    # to send multiple context in single view
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data['teacher_list'] = Teacher.objects.count()
@@ -724,7 +741,7 @@ class AdminAjaxTeacherSearchView(View):
     def get(self, request, *args, **kwargs):
         subject = self.request.GET.get("subject")
         location = self.request.GET.get("location")
-        print(subject, location, '\n +++++++++++++++++++++++')
+        print(subject, location, '\n +++++++++++++++++++++++')        
         if subject != "" and location != "":
             # teacherlist = Teacher.objects.all()
             # listobj = teacherlist.filter(subject__a=subject)
@@ -733,14 +750,16 @@ class AdminAjaxTeacherSearchView(View):
             )
             # teacher = Teacher.objects.filter(subject=subject)
             print("sdafdsf")
-            print(teacherlist)
+            print(teacherlist, "\n list ++++++++++++++++++++++++++")
 
         elif subject != "" and location == "":
+            print(subject)
             teacherlist = Teacher.objects.filter(Q(subject__name__icontains=subject))
             print(subject)
             print(teacherlist)
         
         elif location != "" and subject == "" :
+            print(location)
             teacherlist = Teacher.objects.filter(Q(address__icontains=location))
             print(location)
             print(teacherlist)
@@ -775,9 +794,23 @@ class AdminAjaxTeacherSearchView(View):
         # except EmptyPage:
         #     results = paginator.page(paginator.num_pages)
 
-        return render(self.request, 'clienttemplates/ajaxteachersearch.html', {
-            'teacherlist': results, 'subject': subject, 'location': location
-        })
+        if subject != "" and location != "":
+            return render(self.request, 'clienttemplates/ajaxteachersearch.html', {
+                'teacherlist': results, 'subject': subject, 'location': location
+            })
+        elif subject != "" and location == "":
+            return render(self.request, 'clienttemplates/ajaxteachersearch.html', {
+                'teacherlist': results, 'subject': subject
+            })
+        elif location != "" and subject == "" :
+            return render(self.request, 'clienttemplates/ajaxteachersearch.html', {
+                'teacherlist': results, 'location': location
+            })
+        else:
+            return render(self.request, 'clienttemplates/ajaxteachersearch.html', {
+                'teacherlist': results
+            })
+        
 
         # return JsonResponse({"message": "success"})
         

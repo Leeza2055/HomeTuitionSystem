@@ -1,24 +1,32 @@
 {% extends "clienttemplates/teacherbase.html" %}
 {% load static %}
+{% block css%}
+<!-- <link rel="stylesheet" href="{% static 'clientstatic/css/login.css' %}"> -->
+{% endblock %}
 {% block content %}
-<h1>{{teacherdetail.name}}</h1>
-<img src="{{teacherdetail.photo.url}}"/>
-<p>Gender: {{teacherdetail.gender}}</p>
-<p>Phone_no: {{teacherdetail.phone_no}}</p>
-<p>Email:{{teacherdetail.email}}</p>
-<p>Address:{{teacherdetail.address}}</p>
-<p>Education:{{teacherdetail.education}}</p>
-<p>Experience:{{teacherdetail.experience}}</p>
-<p>CV:{{teacherdetail.cv}}</p>
-<p>Citizenship:{{teacherdetail.citizenship}}</p>
-<p>Course:{{teacherdetail.course}}</p>
-<p>Subject:{{teacherdetail.subject}}</p>
-<div class="mb-3">
 
-    <a class="btn btn-primary" style="width: 25%;" href="{% url 'hometuitionapp:teacherupdate' request.user.teacher.id %}">Update</a>
-    
-    <a class="btn btn-danger" style="width: 25%;" href="{% url 'hometuitionapp:teacherdelete' request.user.teacher.id %}">Delete</a>
+<div class="mt-3 mb-2">
+    <h1>{{teacherdetail.name}}</h1>
+    <img src="{{teacherdetail.photo.url}}"/>
+    <p> Gender: {{teacherdetail.gender}}</p>
+    <p>Phone_no: {{teacherdetail.phone_no}}</p>
+    <p>Email:{{teacherdetail.email}}</p>
+    <p>Address:{{teacherdetail.address}}</p>
+    <p>Education:{{teacherdetail.education}}</p>
+    <p>Experience:{{teacherdetail.experience}}</p>
+    <p>CV:{{teacherdetail.cv}}</p>
+    <p>Citizenship:{{teacherdetail.citizenship}}</p>
+    <p>Course:{{teacherdetail.course}}</p>
+    <p>Subject:{{teacherdetail.subject}}</p>
 </div>
+<div class=" mb-3"> 
+    <a href="{% url 'hometuitionapp:teacherupdate' request.user.teacher.id %}" class="btn btn-primary">Update Profile</a>
+    
+    <a href="{% url 'hometuitionapp:teacherdelete' request.user.teacher.id %}" class="btn btn-danger">Delete Profile</a>
+    <!-- <a class="btn btn-danger text-white" onclick="document.getElementById('del').style.display='block'" >Delete Profile</a> -->
+</div>
+
+
 {% endblock %}
 
 

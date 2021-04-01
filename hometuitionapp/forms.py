@@ -197,6 +197,7 @@ class RatingForm(forms.ModelForm):
     class Meta:
         model = Rating
         fields = ['rate']
+        # fields = "__all__"
 
 
 class HomeTuitionSystemForm(forms.ModelForm):
@@ -207,12 +208,10 @@ class HomeTuitionSystemForm(forms.ModelForm):
 
 class AdminLoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={
-        "placeholder": "Enter your username...",
         "class": "form-control"
 
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
-        "placeholder": "Enter password...",
         "class": "form-control",
 
     }))
