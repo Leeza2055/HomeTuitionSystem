@@ -116,7 +116,18 @@ class TeacherRegisterForm(forms.ModelForm):
         "class": "form-control",
 
     }))
-    experience = forms.CharField(widget=forms.TextInput(attrs={
+    
+    can_teach_location = forms.CharField(widget=forms.Textarea(attrs={
+        "class": "form-control",
+
+    }))
+
+    monthly_fee = forms.CharField(widget=forms.NumberInput(attrs={
+        "class": "form-control",
+
+    }))
+
+    teaching_experience = forms.CharField(widget=forms.Textarea(attrs={
         "class": "form-control",
 
     }))
@@ -124,7 +135,10 @@ class TeacherRegisterForm(forms.ModelForm):
     class Meta:
         model = Teacher
         fields = ['username', 'email', 'password', 'confirm_password', 'name', 'gender', 'photo',
-                  'phone_no', 'address', 'education', 'experience', 'cv', 'citizenship', 'course', 'subject']
+                  'phone_no', 'address', 'education', 'cv', 'citizenship', 'course', 'subject',
+                  'can_teach_location','teaching_experience','monthly_fee',
+                  'training_license','availabilty','reference_person','reference_person_contact_no',
+                  ]
 
     def clean_username(self):
         uname = self.cleaned_data["username"]

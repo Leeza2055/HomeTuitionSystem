@@ -71,11 +71,15 @@
 		<div class="row">
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Course</label>
-				{{form.course}}
+				{% for item in form.course %}
+                    <li><input type="checkbox", value="clicked", name="c{{item.id}}">{{item}}</li>
+            	{% endfor %}
 			</div>
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">Subject</label>
-				{{form.subject}}
+				{% for item in form.subject %}
+                    <li><input type="checkbox", value="clicked", name="c{{item.id}}">{{item}}</li>
+            	{% endfor %}
 			</div>
 		</div>
 		<!-- {%	for	field	in	form	%}
@@ -97,6 +101,40 @@
 			<div class="col-md-6 col-sm-6 form-group">
 				<label class="col-form-label">CV</label>
 				{{form.cv}}
+			</div>
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Monthly Fee</label>
+				{{form.monthly_fee}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Teaching Experience</label>
+				{{form.teaching_experience}}
+			</div>
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Teaching Location</label>
+				{{form.can_teach_location}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Training License</label>
+				{{form.traning_license}}
+			</div>
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Availability</label>
+				{{form.availability}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Reference Person Name</label>
+				{{form.referenc_person}}
+			</div>
+			<div class="col-md-6 col-sm-6 form-group">
+				<label class="col-form-label">Reference Person Contact</label>
+				{{form.reference_person_contact_no}}
 			</div>
 		</div>
 		<div class="row">

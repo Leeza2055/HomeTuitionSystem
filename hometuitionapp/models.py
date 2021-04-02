@@ -73,7 +73,6 @@ class Teacher(TimeStamp):
     email = models.EmailField()
     address = models.CharField(max_length=40)
     education = models.CharField(max_length=100)
-    experience = models.CharField(max_length=40)
     cv = models.FileField(upload_to="cv")
     citizenship = models.FileField(upload_to="citizenship")
     can_teach_location = models.TextField()
